@@ -1,6 +1,13 @@
-import { contextBridge } from "electron"
+import { contextBridge, ipcRenderer } from "electron"
 
-const api = {} as const
+const api = {
+    openFile: () => {
+        ipcRenderer.send("open-file")
+    },
+    dilation: (): Promise<string> => {
+        return ipcRenderer.invoke("dilation")
+    },
+} as const
 
 contextBridge.exposeInMainWorld("api", api)
 

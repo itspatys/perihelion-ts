@@ -1,5 +1,14 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, ipcMain } from "electron"
 import path from "path"
+import { showOpenFileDialog } from "./file"
+import { dilation } from "./filters"
+import * as wasmModule from "opencv-wasm"
+
+type File = {
+    filePath?: string
+}
+
+let currentFile: File = {}
 
 if (require("electron-squirrel-startup")) {
     app.quit()
@@ -42,4 +51,19 @@ app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow()
     }
+})
+
+ipcMain.on("open-file", async (event) => {
+    const browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow) return
+    currentFile.filePath = await showOpenFileDialog(browserWindow)
+    console.log(currentFile)
+})
+
+ipcMain.handle("dilation", (event) => {
+    const browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow) return
+    if (!currentFile.filePath) return
+    const result = dilation(currentFile.filePath)
+    return result
 })
