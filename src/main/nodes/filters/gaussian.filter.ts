@@ -1,5 +1,5 @@
 import { cv } from "opencv-wasm"
-import { loadImg, saveImg } from "../utils/img.util"
+import { loadImg, saveImg } from "../../utils/img.util"
 
 
 export const gaussian = async (filePath: string) => {

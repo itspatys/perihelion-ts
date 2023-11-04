@@ -1,16 +1,9 @@
 import { app, BrowserWindow, ipcMain, screen } from "electron"
 import path from "path"
-import { showOpenFileDialog } from "./file"
-import { dilation } from "./filters"
-import { workflowRunner } from "./workflow-runner"
+import { workflowRunner } from "./workflow/workflow-runner"
 import { config } from "dotenv"
 config()
 
-type File = {
-    filePath?: string
-}
-
-const currentFile: File = {}
 
 if (require("electron-squirrel-startup")) {
     app.quit()
@@ -71,20 +64,6 @@ app.on("activate", () => {
     }
 })
 
-ipcMain.on("open-file", async (event) => {
-    const browserWindow = BrowserWindow.fromWebContents(event.sender)
-    if (!browserWindow) return
-    currentFile.filePath = await showOpenFileDialog(browserWindow)
-    console.log(currentFile)
-})
-
-ipcMain.handle("dilation", (event) => {
-    const browserWindow = BrowserWindow.fromWebContents(event.sender)
-    if (!browserWindow) return
-    if (!currentFile.filePath) return
-    const result = dilation(currentFile.filePath)
-    return result
-})
 
 ipcMain.on("click", async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
