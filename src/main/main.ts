@@ -1,13 +1,16 @@
-import { app, BrowserWindow, ipcMain, Menu } from "electron"
+import { app, BrowserWindow, ipcMain, screen } from "electron"
 import path from "path"
 import { showOpenFileDialog } from "./file"
 import { dilation } from "./filters"
+import { workflowRunner } from "./workflow-runner"
+import { config } from "dotenv"
+config()
 
 type File = {
     filePath?: string
 }
 
-let currentFile: File = {}
+const currentFile: File = {}
 
 if (require("electron-squirrel-startup")) {
     app.quit()
@@ -23,6 +26,17 @@ const createWindow = () => {
             preload: path.join(__dirname, "preload.js"),
         },
     })
+    //move window to second screen 
+    
+    if (process.env.MULTIPLE_SCREENS === "true" ? true : false) {
+        const displays = screen.getAllDisplays()
+        const externalDisplay = displays.find((display) => {
+            return display.bounds.x !== 0 || display.bounds.y !== 0
+        })
+        if (externalDisplay) {
+            mainWindow.setBounds(externalDisplay.bounds)
+        }
+    }
 
     if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
         mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
@@ -35,7 +49,10 @@ const createWindow = () => {
         )
     }
 
-    mainWindow.webContents.openDevTools({ mode: "detach" })
+    if(process.env.DEVTOOLS === "true" ? true : false) {
+        if (!["right", "bottom", "undocked", "detach"].includes(process.env.DEVTOOLS_POSITION)) return
+        mainWindow.webContents.openDevTools({ mode: process.env.DEVTOOLS_POSITION as "right" | "bottom" |"undocked" |"detach" })
+    }
 
     return mainWindow
 }
@@ -73,7 +90,5 @@ ipcMain.on("click", async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
 
-    setInterval(() => {
-        browserWindow.webContents.send("update-counter", Math.random())
-    }, 1000)
+    workflowRunner(browserWindow)
 })

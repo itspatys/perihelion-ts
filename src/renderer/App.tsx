@@ -1,7 +1,6 @@
 import { Button, NextUIProvider } from "@nextui-org/react"
 import { useEffect, useState } from "react"
 import TitleBar from "./layouts/TitleBar/TitleBar"
-import { useNodes } from "reactflow"
 
 const App = () => {
     const [img, setImg] = useState<null | string>(null)
