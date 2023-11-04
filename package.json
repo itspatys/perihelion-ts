@@ -47,6 +47,7 @@
         "autoprefixer": "^10.4.16",
         "dotenv": "^16.3.1",
         "electron-squirrel-startup": "^1.0.0",
+        "electron-store": "^8.1.0",
         "framer-motion": "^10.16.4",
         "jimp": "^0.22.10",
         "opencv-wasm": "^4.3.0-10",

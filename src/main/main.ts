@@ -2,8 +2,11 @@ import { app, BrowserWindow, ipcMain, screen } from "electron"
 import path from "path"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { config } from "dotenv"
-config()
+import { workspaceCreate } from "./workspace/workspace.create"
+import { PreloadChannels } from "../data/preload.channels"
+import { workspaceLoad } from "./workspace/workspace.load"
 
+config()
 
 if (require("electron-squirrel-startup")) {
     app.quit()
@@ -50,6 +53,8 @@ const createWindow = () => {
     return mainWindow
 }
 
+
+
 app.on("ready", createWindow)
 
 app.on("window-all-closed", () => {
@@ -64,10 +69,21 @@ app.on("activate", () => {
     }
 })
 
-
 ipcMain.on("click", async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
 
     workflowRunner(browserWindow)
+})
+
+ipcMain.on(PreloadChannels.workspaceCreate, async () => {
+    workspaceCreate()
+})
+
+
+ipcMain.on(PreloadChannels.workspaceLoad, async (event)=> {
+    const browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow) return
+
+    workspaceLoad(browserWindow)
 })

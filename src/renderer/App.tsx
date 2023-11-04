@@ -13,19 +13,17 @@ const App = () => {
         })
     }, [])
 
+    useEffect(() => {
+        window.api.workspace.handleLoad((event, value) => {
+            console.log(event, value)
+        })
+    }, [])
+
     return (
         <NextUIProvider>
             <main className="dark">
                 <TitleBar />
                 <Button onClick={window.api.openFile}>Open file</Button>
-                <Button
-                    onClick={async () => {
-                        const result = await window.api.dilation()
-                        setImg(result)
-                    }}
-                >
-                    Dilation
-                </Button>
                 {img ? <img src={img} /> : null}
                 <Button
                     onClick={() => {
@@ -33,6 +31,12 @@ const App = () => {
                     }}
                 >
                     Increase
+                </Button>
+                <Button onClick={window.api.workspace.create}>
+                    Create new workspace
+                </Button>
+                <Button onClick={window.api.workspace.load}>
+                    Load workspace
                 </Button>
                 <p>{counter}</p>
             </main>

@@ -1,16 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { contextBridge, ipcRenderer } from "electron"
+import { PreloadChannels } from "../data/preload.channels"
 
 const api = {
     openFile: () => {
         ipcRenderer.send("open-file")
     },
-    dilation: (): Promise<string> => {
-        return ipcRenderer.invoke("dilation")
-    },
-    handleCounter: (callback) => ipcRenderer.on("update-counter", callback),
+    handleCounter: (callback: any) => ipcRenderer.on("update-counter", callback),
     click: () => {
         ipcRenderer.send("click")
     },
+
+    workspaceCreate: () => {
+        ipcRenderer.send(PreloadChannels.workspaceCreate)
+    },
+
+    workspace: {
+        create: () => ipcRenderer.send(PreloadChannels.workspaceCreate),
+        load: () => ipcRenderer.send(PreloadChannels.workspaceLoad),
+        handleLoad: (callback: any) => ipcRenderer.on(PreloadChannels.workspaceHandleLoad, callback)
+    }
 } as const
 
 contextBridge.exposeInMainWorld("api", api)
