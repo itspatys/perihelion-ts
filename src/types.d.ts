@@ -4,3 +4,5 @@ declare const MAIN_WINDOW_VITE_NAME: string
 declare interface Window {
     api: import("./preload/preload").Api
 }
+
+declare module "*.png"
