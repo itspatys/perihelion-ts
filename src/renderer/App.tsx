@@ -1,40 +1,20 @@
-import { Button, NextUIProvider } from "@nextui-org/react"
-import { useEffect, useState } from "react"
+import { NextUIProvider } from "@nextui-org/react"
 import TitleBar from "./layouts/TitleBar/TitleBar"
+import FlowChart from "./features/FlowChart"
+
+import "reactflow/dist/style.css"
+import { useState } from "react"
+import OpenScreen from "./features/OpenScreen"
 
 const App = () => {
-    const [img, setImg] = useState<null | string>(null)
-    const [counter, setCounter] = useState(0)
-
-    useEffect(() => {
-        window.api.handleCounter((event, value) => {
-            console.log(event, value)
-            setCounter(value)
-        })
-    }, [])
-
+    const [appState, setAppState] = useState<"openScreen" | "flow">(
+        "openScreen",
+    )
     return (
         <NextUIProvider>
-            <main className="dark">
+            <main className="dark flex flex-col w-screen h-screen">
                 <TitleBar />
-                <Button onClick={window.api.openFile}>Open file</Button>
-                <Button
-                    onClick={async () => {
-                        const result = await window.api.dilation()
-                        setImg(result)
-                    }}
-                >
-                    Dilation
-                </Button>
-                {img ? <img src={img} /> : null}
-                <Button
-                    onClick={() => {
-                        window.api.click()
-                    }}
-                >
-                    Increase
-                </Button>
-                <p>{counter}</p>
+                {appState === "openScreen" ? <OpenScreen /> : <FlowChart />}
             </main>
         </NextUIProvider>
     )

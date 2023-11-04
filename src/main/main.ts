@@ -1,9 +1,8 @@
-import { app, BrowserWindow, ipcMain, screen } from "electron"
+import { app, BrowserWindow, ipcMain, screen, Dialog, dialog } from "electron"
 import path from "path"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { config } from "dotenv"
 config()
-
 
 if (require("electron-squirrel-startup")) {
     app.quit()
@@ -19,8 +18,8 @@ const createWindow = () => {
             preload: path.join(__dirname, "preload.js"),
         },
     })
-    //move window to second screen 
-    
+    //move window to second screen
+
     if (process.env.MULTIPLE_SCREENS === "true" ? true : false) {
         const displays = screen.getAllDisplays()
         const externalDisplay = displays.find((display) => {
@@ -42,9 +41,20 @@ const createWindow = () => {
         )
     }
 
-    if(process.env.DEVTOOLS === "true" ? true : false) {
-        if (!["right", "bottom", "undocked", "detach"].includes(process.env.DEVTOOLS_POSITION)) return
-        mainWindow.webContents.openDevTools({ mode: process.env.DEVTOOLS_POSITION as "right" | "bottom" |"undocked" |"detach" })
+    if (process.env.DEVTOOLS === "true" ? true : false) {
+        if (
+            !["right", "bottom", "undocked", "detach"].includes(
+                process.env.DEVTOOLS_POSITION,
+            )
+        )
+            return
+        mainWindow.webContents.openDevTools({
+            mode: process.env.DEVTOOLS_POSITION as
+                | "right"
+                | "bottom"
+                | "undocked"
+                | "detach",
+        })
     }
 
     return mainWindow
@@ -63,7 +73,6 @@ app.on("activate", () => {
         createWindow()
     }
 })
-
 
 ipcMain.on("click", async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
