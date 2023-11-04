@@ -1,5 +1,6 @@
 import Jimp from "jimp"
 import { cv } from "opencv-wasm"
+import type { Node } from "@reactflow/core"
 
 export const dilation = async (filePath: string) => {
     const img = await Jimp.read(filePath)

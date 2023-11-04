@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, ipcMain, Menu } from "electron"
 import path from "path"
 import { showOpenFileDialog } from "./file"
 import { dilation } from "./filters"
@@ -67,4 +67,13 @@ ipcMain.handle("dilation", (event) => {
     if (!currentFile.filePath) return
     const result = dilation(currentFile.filePath)
     return result
+})
+
+ipcMain.on("click", async (event) => {
+    const browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow) return
+
+    setInterval(() => {
+        browserWindow.webContents.send("update-counter", Math.random())
+    }, 1000)
 })

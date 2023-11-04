@@ -7,6 +7,10 @@ const api = {
     dilation: (): Promise<string> => {
         return ipcRenderer.invoke("dilation")
     },
+    handleCounter: (callback) => ipcRenderer.on("update-counter", callback),
+    click: () => {
+        ipcRenderer.send("click")
+    },
 } as const
 
 contextBridge.exposeInMainWorld("api", api)

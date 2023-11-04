@@ -1,9 +1,19 @@
 import { Button, NextUIProvider } from "@nextui-org/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TitleBar from "./layouts/TitleBar/TitleBar"
+import { useNodes } from "reactflow"
 
 const App = () => {
     const [img, setImg] = useState<null | string>(null)
+    const [counter, setCounter] = useState(0)
+
+    useEffect(() => {
+        window.api.handleCounter((event, value) => {
+            console.log(event, value)
+            setCounter(value)
+        })
+    }, [])
+
     return (
         <NextUIProvider>
             <main className="dark">
@@ -18,6 +28,14 @@ const App = () => {
                     Dilation
                 </Button>
                 {img ? <img src={img} /> : null}
+                <Button
+                    onClick={() => {
+                        window.api.click()
+                    }}
+                >
+                    Increase
+                </Button>
+                <p>{counter}</p>
             </main>
         </NextUIProvider>
     )
