@@ -5,6 +5,7 @@
     "description": "Node based image analysis tool",
     "main": ".vite/build/main.js",
     "scripts": {
+        "electron": "electron .",
         "start": "electron-forge start",
         "package": "electron-forge package",
         "make": "electron-forge make",
@@ -44,11 +45,14 @@
     },
     "dependencies": {
         "@nextui-org/react": "^2.1.13",
+        "@rollup/plugin-commonjs": "^25.0.7",
         "autoprefixer": "^10.4.16",
         "dotenv": "^16.3.1",
         "electron-squirrel-startup": "^1.0.0",
         "electron-store": "^8.1.0",
         "framer-motion": "^10.16.4",
+        "import-cwd": "^3.0.0",
+        "import-modules": "^3.2.0",
         "jimp": "^0.22.10",
         "opencv-wasm": "^4.3.0-10",
         "react": "^18.2.0",

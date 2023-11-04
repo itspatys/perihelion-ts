@@ -5,10 +5,10 @@ export enum NodeStatus {
     PENDING = "PENDING",
     RUNNING = "RUNNING",
     SUCCESS = "SUCCESS",
-    FAILED = "FAILED"
+    FAILED = "FAILED",
 }
 
-export interface NodeData  {
+export interface NodeData {
     status: NodeStatus
 }
 

@@ -38,6 +38,11 @@ const App = () => {
                 <Button onClick={window.api.workspace.load}>
                     Load workspace
                 </Button>
+
+                <Button onClick={window.api.loadFilters}>
+                    Load workspace
+                </Button>
+
                 <p>{counter}</p>
             </main>
         </NextUIProvider>
