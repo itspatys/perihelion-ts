@@ -12,9 +12,8 @@ export const saveImg = (mat: any, filePath: string): boolean => {
         new Jimp({
             width: mat.cols,
             height: mat.rows,
-            data: Buffer.from(mat.data)
-        })
-        .write(filePath);
+            data: Buffer.from(mat.data),
+        }).write(filePath)
     } catch (error) {
         console.log(error)
         return false

@@ -1,11 +1,5 @@
-import {
-    Button,
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalHeader,
-} from "@nextui-org/react"
-import Logo from "./components/Logo"
+import { Button, Modal, ModalBody, ModalContent } from "@nextui-org/react"
+import { Logo } from "./components/Logo"
 
 const OpenScreen = () => {
     return (

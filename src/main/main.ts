@@ -1,13 +1,14 @@
-import { app, BrowserWindow, ipcMain, screen, Dialog, dialog } from "electron"
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { app, BrowserWindow, ipcMain, screen } from "electron"
 import path from "path"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { config } from "dotenv"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { PreloadChannels } from "../data/preload.channels"
 import { workspaceLoad } from "./workspace/workspace.load"
+import fs from "fs"
 
 config()
-
 if (require("electron-squirrel-startup")) {
     app.quit()
 }
@@ -85,6 +86,32 @@ ipcMain.on("click", async (event) => {
     workflowRunner(browserWindow)
 })
 
+ipcMain.on("loadFilters", async (event) => {
+    const browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow) return
+    const filters = fs.readdir(
+        path.join(process.cwd(), ".vite/build"),
+        async (err, files) => {
+            if (err) {
+                console.log(err)
+                return
+            }
+            const filters = []
+            for (const file of files) {
+                if (file.endsWith(".filter.js")) {
+                    const module = await require(
+                        path.join(process.cwd(), ".vite/build", file),
+                    )
+                    filters.push(module)
+                }
+            }
+            console.log(filters)
+            return filters
+        },
+    )
+    browserWindow.webContents.send("loadFilters", filters)
+})
+
 ipcMain.on(PreloadChannels.workspaceCreate, async () => {
     workspaceCreate()
 })
@@ -92,6 +119,5 @@ ipcMain.on(PreloadChannels.workspaceCreate, async () => {
 ipcMain.on(PreloadChannels.workspaceLoad, async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
-
     workspaceLoad(browserWindow)
 })
