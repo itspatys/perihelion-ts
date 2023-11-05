@@ -20,8 +20,20 @@ const OpenScreen = () => {
                 <ModalContent>
                     <ModalBody>
                         <Logo />
-                        <Button>Open existing project</Button>
-                        <Button>Create new project</Button>
+                        <Button
+                            onClick={() => {
+                                window.api.workspace.load()
+                            }}
+                        >
+                            Open existing project
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                window.api.workspace.create()
+                            }}
+                        >
+                            Create new project
+                        </Button>
                     </ModalBody>
                 </ModalContent>
             </Modal>

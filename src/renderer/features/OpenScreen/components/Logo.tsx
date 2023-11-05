@@ -6,7 +6,7 @@ const Logo = () => {
             <div className="text-center">
                 <img src={logo} alt="logo" className="h-12" />
             </div>
-            <p className="text-xl">Perihelion</p>
+            <p className="text-xl select-none">Perihelion</p>
         </section>
     )
 }
