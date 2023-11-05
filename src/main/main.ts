@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { app, BrowserWindow, contextBridge, ipcMain, screen } from "electron"
+import { app, BrowserWindow, ipcMain, screen } from "electron"
 import path from "path"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { config } from "dotenv"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { PreloadChannels } from "../data/preload.channels"
 import { workspaceLoad } from "./workspace/workspace.load"
-import { nodesLoader } from "./nodes/nodes.loader"
 import fs from "fs"
-import importModules from "import-modules"
-import { importer } from "./importer"
 
 config()
 if (require("electron-squirrel-startup")) {
