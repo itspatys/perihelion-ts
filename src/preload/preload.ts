@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { contextBridge, ipcRenderer } from "electron"
+
 import { PreloadChannels } from "../data/preload.channels"
 
 const api = {
@@ -18,9 +19,10 @@ const api = {
 
     workspace: {
         create: () => ipcRenderer.send(PreloadChannels.workspaceCreate),
-        load: () => ipcRenderer.send(PreloadChannels.workspaceLoad),
+        load: (): Promise<string> =>
+            ipcRenderer.invoke(PreloadChannels.workspaceLoad),
         handleLoad: (callback: any) =>
-            ipcRenderer.on(PreloadChannels.workspaceHandleLoad, callback),
+            ipcRenderer.invoke(PreloadChannels.workspaceHandleLoad, callback),
     },
 } as const
 

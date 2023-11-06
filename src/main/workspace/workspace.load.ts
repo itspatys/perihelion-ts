@@ -1,8 +1,9 @@
 import { BrowserWindow, dialog } from "electron"
 import * as fs from "fs"
+
+import { CONFIG_FILE_NAME } from "../../data/consts"
 import { PreloadChannels } from "../../data/preload.channels"
 import { StoreValues, store } from "../store"
-import { CONFIG_FILE_NAME } from "../../data/consts"
 
 export const workspaceLoad = (browserWindow: BrowserWindow) => {
     const configFilePath = dialog.showOpenDialogSync({
@@ -14,6 +15,10 @@ export const workspaceLoad = (browserWindow: BrowserWindow) => {
             },
         ],
     })[0]
+
+    if (!configFilePath) {
+        return
+    }
 
     store.set(
         StoreValues.workspacePath,
@@ -31,4 +36,6 @@ export const workspaceLoad = (browserWindow: BrowserWindow) => {
             configFile,
         )
     })
+
+    return configFilePath
 }

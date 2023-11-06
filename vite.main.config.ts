@@ -1,11 +1,10 @@
-import { defineConfig } from "vite"
-import wasm from "vite-plugin-wasm"
-import topLevelAwait from "vite-plugin-top-level-await"
-import { viteStaticCopy } from "vite-plugin-static-copy"
-
+import commonjs from "@rollup/plugin-commonjs"
 import glob from "glob"
 import path from "node:path"
-import commonjs from "@rollup/plugin-commonjs"
+import { defineConfig } from "vite"
+import { viteStaticCopy } from "vite-plugin-static-copy"
+import topLevelAwait from "vite-plugin-top-level-await"
+import wasm from "vite-plugin-wasm"
 
 function getEntries() {
     const a = Object.fromEntries(

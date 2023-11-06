@@ -1,6 +1,7 @@
-import Store from "electron-store"
 import { Node } from "@reactflow/core"
+import Store from "electron-store"
 import { Edge } from "reactflow"
+
 import { NodeData } from "../data/configuration-file.interface"
 
 export enum StoreValues {

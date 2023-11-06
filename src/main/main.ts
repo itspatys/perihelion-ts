@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { app, BrowserWindow, ipcMain, screen } from "electron"
-import path from "path"
-import { workflowRunner } from "./workflow/workflow-runner"
 import { config } from "dotenv"
-import { workspaceCreate } from "./workspace/workspace.create"
-import { PreloadChannels } from "../data/preload.channels"
-import { workspaceLoad } from "./workspace/workspace.load"
+import { BrowserWindow, app, ipcMain, screen, session } from "electron"
 import fs from "fs"
+import path from "path"
+
+import { PreloadChannels } from "../data/preload.channels"
+import { workflowRunner } from "./workflow/workflow-runner"
+import { workspaceCreate } from "./workspace/workspace.create"
+import { workspaceLoad } from "./workspace/workspace.load"
 
 config()
 if (require("electron-squirrel-startup")) {
@@ -15,8 +16,10 @@ if (require("electron-squirrel-startup")) {
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1280,
+        height: 720,
+        minWidth: 1280,
+        minHeight: 720,
         titleBarStyle: "hidden",
         titleBarOverlay: true,
         webPreferences: {
@@ -65,7 +68,16 @@ const createWindow = () => {
     return mainWindow
 }
 
-app.on("ready", createWindow)
+app.on("ready", async () => {
+    createWindow()
+})
+
+app.whenReady().then(async () => {
+    const reactDevToolsPath = process.env.REACT_DEVTOOLS_PATH as string
+    console.log("Devtools:", reactDevToolsPath)
+    if (!reactDevToolsPath) return
+    session.defaultSession.loadExtension(reactDevToolsPath)
+})
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
@@ -116,8 +128,9 @@ ipcMain.on(PreloadChannels.workspaceCreate, async () => {
     workspaceCreate()
 })
 
-ipcMain.on(PreloadChannels.workspaceLoad, async (event) => {
+ipcMain.handle(PreloadChannels.workspaceLoad, async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
-    workspaceLoad(browserWindow)
+
+    return workspaceLoad(browserWindow)
 })

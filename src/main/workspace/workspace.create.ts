@@ -1,7 +1,8 @@
 import { dialog } from "electron"
-import { ConfigurationFile } from "../../data/configuration-file.interface"
 import * as fs from "fs"
 import * as path from "path"
+
+import { ConfigurationFile } from "../../data/configuration-file.interface"
 import { CONFIG_FILE_NAME } from "../../data/consts"
 
 export const workspaceCreate = () => {

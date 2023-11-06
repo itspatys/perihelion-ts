@@ -1,6 +1,7 @@
 import { cv } from "opencv-wasm"
-import { loadImg, saveImg } from "../../utils/img.util"
+
 import { Filter } from "../../../data/filter.interface"
+import { loadImg, saveImg } from "../../utils/img.util"
 
 const gaussian = async (filePath: string, args: GaussianArgs) => {
     const mat = await loadImg(filePath)

@@ -1,7 +1,13 @@
 import { Button, Modal, ModalBody, ModalContent } from "@nextui-org/react"
+import { useContext } from "react"
+import { toast } from "sonner"
+
+import { AppContext } from "../../context/AppContext"
 import { Logo } from "./components/Logo"
 
 const OpenScreen = () => {
+    const { setAppState, setWorkspace } = useContext(AppContext)
+
     return (
         <section className="flex h-full bg-background">
             <Modal
@@ -15,8 +21,11 @@ const OpenScreen = () => {
                     <ModalBody>
                         <Logo />
                         <Button
-                            onClick={() => {
-                                window.api.workspace.load()
+                            onClick={async () => {
+                                const path = await window.api.workspace.load()
+                                setAppState("flow")
+                                setWorkspace(path)
+                                toast.success("Project loaded successfully")
                             }}
                         >
                             Open existing project

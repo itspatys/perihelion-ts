@@ -4,8 +4,10 @@
         "jsnext",
         "nextui",
         "reactflow",
+        "sonner",
         "tailwind",
         "tailwindcss",
+        "trivago",
         "undocked"
     ]
 }
