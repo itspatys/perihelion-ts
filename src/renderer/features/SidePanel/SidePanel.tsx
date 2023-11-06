@@ -18,7 +18,7 @@ const SidePanel = () => {
     const workspace = useSelector((state) => state.app.workspace)
     const dispatch = useDispatch()
 
-
+    // for test purposes
     useEffect(() => {
         window.api.handleLoadNodes((event: any, value: any) => {
             console.log(value)
