@@ -31,6 +31,7 @@ const filter: Filter<GaussianArgs> = {
     label: "Gaussian",
     type: "filter",
     subtype: "gaussian",
+    description: "Applies gaussian blur to image",
     parameters: [
         {
             label: "Sigma X",
@@ -67,5 +68,4 @@ const filter: Filter<GaussianArgs> = {
     ],
 }
 
-//export default filter
 module.exports = filter
