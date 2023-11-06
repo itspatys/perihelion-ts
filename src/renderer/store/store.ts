@@ -6,10 +6,11 @@ import {
 } from "react-redux"
 
 import app from "./appSlice"
+import viewport from "./viewportSlice"
 import workflow from "./workflowSlice"
 
 const store = configureStore({
-    reducer: { app, workflow },
+    reducer: { app, workflow, viewport },
 })
 
 export type Dispatch = typeof store.dispatch

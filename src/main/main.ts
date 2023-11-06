@@ -5,10 +5,10 @@ import fs from "fs"
 import path from "path"
 
 import { PreloadChannels } from "../data/preload.channels"
+import { nodesLoader } from "./nodes/nodes.loader"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { workspaceLoad } from "./workspace/workspace.load"
-import { nodesLoader } from "./nodes/nodes.loader"
 
 config()
 if (require("electron-squirrel-startup")) {
@@ -22,7 +22,13 @@ const createWindow = () => {
         minWidth: 1280,
         minHeight: 720,
         titleBarStyle: "hidden",
-        titleBarOverlay: true,
+        titleBarOverlay:
+            process.platform === "win32"
+                ? {
+                      color: "transparent",
+                      symbolColor: "white",
+                  }
+                : true,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
         },
