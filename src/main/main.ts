@@ -74,9 +74,15 @@ app.on("ready", async () => {
 
 app.whenReady().then(async () => {
     const reactDevToolsPath = process.env.REACT_DEVTOOLS_PATH as string
-    console.log("Devtools:", reactDevToolsPath)
-    if (!reactDevToolsPath) return
-    session.defaultSession.loadExtension(reactDevToolsPath)
+    const reduxDevToolsPath = process.env.REDUX_DEVTOOLS_PATH as string
+    console.log("Redux Devtools:", reduxDevToolsPath)
+    console.log("React Devtools:", reactDevToolsPath)
+    if (reactDevToolsPath) {
+        await session.defaultSession.loadExtension(reactDevToolsPath)
+    }
+    if (reduxDevToolsPath) {
+        await session.defaultSession.loadExtension(reduxDevToolsPath)
+    }
 })
 
 app.on("window-all-closed", () => {

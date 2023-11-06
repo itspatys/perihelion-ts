@@ -12,8 +12,10 @@ export interface NodeData {
     status: NodeStatus
 }
 
+export type NodeTypes = "start" | "operation"
+
 export interface ConfigurationFile {
-    nodes: Node<NodeData>[]
+    nodes: Node<NodeData, NodeTypes>[]
     edges: Edge[]
     workspacePath: string
 }

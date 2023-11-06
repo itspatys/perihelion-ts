@@ -1,30 +1,19 @@
 import { NextUIProvider } from "@nextui-org/react"
-import { useContext, useEffect } from "react"
+import { Provider } from "react-redux"
 import "reactflow/dist/style.css"
 import { Toaster } from "sonner"
 
-import AppContextProvider, { AppContext } from "./context/AppContext"
-import FlowChart from "./features/FlowChart"
-import OpenScreen from "./features/OpenScreen"
-import TitleBar from "./layouts/TitleBar/TitleBar"
+import Main from "./pages/Main"
+import store from "./store/store"
 
 const App = () => {
-    const { appState } = useContext(AppContext)
-
-    useEffect(() => {
-        console.log(appState)
-    }, [appState])
     return (
-        <AppContextProvider>
+        <Provider store={store}>
             <NextUIProvider>
-                <Toaster />
-                <main className="dark flex flex-col w-screen h-screen">
-                    <TitleBar />
-                    {appState === "openScreen" ? <OpenScreen /> : <></>}
-                    {appState === "flow" ? <FlowChart /> : <></>}
-                </main>
+                <Toaster position="top-right" offset="32px" />
+                <Main />
             </NextUIProvider>
-        </AppContextProvider>
+        </Provider>
     )
 }
 

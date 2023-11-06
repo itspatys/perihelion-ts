@@ -1,12 +1,12 @@
 import { Button, Modal, ModalBody, ModalContent } from "@nextui-org/react"
-import { useContext } from "react"
+import { useDispatch } from "react-redux"
 import { toast } from "sonner"
 
-import { AppContext } from "../../context/AppContext"
+import { setApp, setWorkspace } from "../../store/appSlice"
 import { Logo } from "./components/Logo"
 
 const OpenScreen = () => {
-    const { setAppState, setWorkspace } = useContext(AppContext)
+    const dispatch = useDispatch()
 
     return (
         <section className="flex h-full bg-background">
@@ -23,8 +23,8 @@ const OpenScreen = () => {
                         <Button
                             onClick={async () => {
                                 const path = await window.api.workspace.load()
-                                setAppState("flow")
-                                setWorkspace(path)
+                                dispatch(setApp("flow"))
+                                dispatch(setWorkspace(path))
                                 toast.success("Project loaded successfully")
                             }}
                         >
