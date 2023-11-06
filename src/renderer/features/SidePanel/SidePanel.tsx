@@ -12,10 +12,18 @@ import { toast } from "sonner"
 import { setApp, setWorkspace } from "../../store/appSlice"
 import { useDispatch, useSelector } from "../../store/store"
 import { clearWorkflow } from "../../store/workflowSlice"
+import { useEffect } from "react"
 
 const SidePanel = () => {
     const workspace = useSelector((state) => state.app.workspace)
     const dispatch = useDispatch()
+
+
+    useEffect(() => {
+        window.api.handleLoadNodes((event: any, value: any) => {
+            console.log(value)
+        })
+    }, [])
 
     return (
         <nav className="grid grid-rows-[1fr_auto] h-full">
@@ -89,6 +97,13 @@ const SidePanel = () => {
                 </Accordion>
             </div>
             <div className="my-2">
+            <Button
+                    className="w-full mb-2"
+                    color="primary"
+                    onClick={() => {window.api.loadNodes()}}
+                >
+                    TEST BUTTON(nie dotykać)
+                </Button>
                 <Button
                     className="w-full mb-2"
                     color="primary"

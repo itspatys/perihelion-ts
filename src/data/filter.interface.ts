@@ -8,10 +8,11 @@ export interface FilterParameter {
     step?: number
 }
 
-export interface Filter<T> {
+export interface Filter<T=object> {
     init: (filePath: string, args: T) => Promise<void>
     label: string
     type: string
     subtype: string
-    parameters: FilterParameter[]
+    description: string
+    parameters?: FilterParameter[]
 }

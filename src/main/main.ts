@@ -8,6 +8,7 @@ import { PreloadChannels } from "../data/preload.channels"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { workspaceLoad } from "./workspace/workspace.load"
+import { nodesLoader } from "./nodes/nodes.loader"
 
 config()
 if (require("electron-squirrel-startup")) {
@@ -104,30 +105,10 @@ ipcMain.on("click", async (event) => {
     workflowRunner(browserWindow)
 })
 
-ipcMain.on("loadFilters", async (event) => {
+ipcMain.on(PreloadChannels.nodesLoad, async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
-    const filters = fs.readdir(
-        path.join(process.cwd(), ".vite/build"),
-        async (err, files) => {
-            if (err) {
-                console.log(err)
-                return
-            }
-            const filters = []
-            for (const file of files) {
-                if (file.endsWith(".filter.js")) {
-                    const module = await require(
-                        path.join(process.cwd(), ".vite/build", file),
-                    )
-                    filters.push(module)
-                }
-            }
-            console.log(filters)
-            return filters
-        },
-    )
-    browserWindow.webContents.send("loadFilters", filters)
+    return nodesLoader(browserWindow)
 })
 
 ipcMain.on(PreloadChannels.workspaceCreate, async () => {

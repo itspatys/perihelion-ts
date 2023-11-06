@@ -13,16 +13,13 @@ const api = {
         ipcRenderer.send("click")
     },
 
-    loadFilters: () => {
-        ipcRenderer.send("loadFilters")
-    },
-
+    loadNodes: () => ipcRenderer.send(PreloadChannels.nodesLoad),
+    handleLoadNodes: (callback: any) => ipcRenderer.on(PreloadChannels.nodesHandleLoad, callback),
+        
     workspace: {
         create: () => ipcRenderer.send(PreloadChannels.workspaceCreate),
-        load: (): Promise<string> =>
-            ipcRenderer.invoke(PreloadChannels.workspaceLoad),
-        handleLoad: (callback: any) =>
-            ipcRenderer.invoke(PreloadChannels.workspaceHandleLoad, callback),
+        load: (): Promise<string> => ipcRenderer.invoke(PreloadChannels.workspaceLoad),
+        handleLoad: (callback: any) => ipcRenderer.invoke(PreloadChannels.workspaceHandleLoad, callback),
     },
 } as const
 
