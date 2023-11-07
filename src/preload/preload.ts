@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { contextBridge, ipcRenderer } from "electron"
-import { Node } from "@reactflow/core"
-import { Edge } from "reactflow"
+
+import { ConfigurationFile } from "../data/configuration-file.interface"
 import { PreloadChannels } from "../data/preload.channels"
 
 const api = {
@@ -15,13 +15,17 @@ const api = {
     },
 
     loadNodes: () => ipcRenderer.send(PreloadChannels.nodesLoad),
-    handleLoadNodes: (callback: any) => ipcRenderer.on(PreloadChannels.nodesHandleLoad, callback),
-        
+    handleLoadNodes: (callback: any) =>
+        ipcRenderer.on(PreloadChannels.nodesHandleLoad, callback),
+
     workspace: {
         create: () => ipcRenderer.send(PreloadChannels.workspaceCreate),
-        load: (): Promise<string> => ipcRenderer.invoke(PreloadChannels.workspaceLoad),
-        handleLoad: (callback: any) => ipcRenderer.invoke(PreloadChannels.workspaceHandleLoad, callback),
-        save: (args: {nodes: Node[], edges: Edge[]}) => ipcRenderer.send(PreloadChannels.workspaceSave, args),
+        load: (): Promise<string> =>
+            ipcRenderer.invoke(PreloadChannels.workspaceLoad),
+        handleLoad: (callback: any) =>
+            ipcRenderer.invoke(PreloadChannels.workspaceHandleLoad, callback),
+        save: (args: ConfigurationFile) =>
+            ipcRenderer.send(PreloadChannels.workspaceSave, args),
     },
 } as const
 

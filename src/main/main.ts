@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { config } from "dotenv"
 import { BrowserWindow, app, ipcMain, screen, session } from "electron"
-import fs from "fs"
 import path from "path"
 
 import { PreloadChannels } from "../data/preload.channels"
@@ -9,6 +8,7 @@ import { nodesLoader } from "./nodes/nodes.loader"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { workspaceLoad } from "./workspace/workspace.load"
+import { workspaceSave } from "./workspace/workspace.save"
 
 config()
 if (require("electron-squirrel-startup")) {
@@ -117,9 +117,6 @@ ipcMain.on(PreloadChannels.nodesLoad, async (event) => {
     return nodesLoader(browserWindow)
 })
 
-
-
-
 ipcMain.on(PreloadChannels.workspaceCreate, async () => {
     workspaceCreate()
 })
@@ -132,5 +129,5 @@ ipcMain.handle(PreloadChannels.workspaceLoad, async (event) => {
 })
 
 ipcMain.on(PreloadChannels.workspaceSave, async (event, args) => {
-    console.log("Saving workspace", args)
+    workspaceSave(args)
 })

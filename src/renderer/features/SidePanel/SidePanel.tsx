@@ -18,6 +18,7 @@ import { addNode, clearWorkflow } from "../../store/workflowSlice"
 const SidePanel = () => {
     const workspace = useSelector((state) => state.app.workspace)
     const viewport = useSelector((state) => state.viewport)
+    const workflow = useSelector((state) => state.workflow)
     const dispatch = useDispatch()
 
     // for test purposes
@@ -115,7 +116,7 @@ const SidePanel = () => {
                 <Button
                     className="w-full mb-2"
                     color="primary"
-                    onClick={() => {window.api.workspace.save("obiekcik")}}
+                    onClick={() => {window.api.workspace.save(workflow)}}
                 >
                     TEST BUTTON(nie dotykać)
                 </Button>
