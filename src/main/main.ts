@@ -117,6 +117,9 @@ ipcMain.on(PreloadChannels.nodesLoad, async (event) => {
     return nodesLoader(browserWindow)
 })
 
+
+
+
 ipcMain.on(PreloadChannels.workspaceCreate, async () => {
     workspaceCreate()
 })
@@ -126,4 +129,8 @@ ipcMain.handle(PreloadChannels.workspaceLoad, async (event) => {
     if (!browserWindow) return
 
     return workspaceLoad(browserWindow)
+})
+
+ipcMain.on(PreloadChannels.workspaceSave, async (event, args) => {
+    console.log("Saving workspace", args)
 })

@@ -115,9 +115,7 @@ const SidePanel = () => {
                 <Button
                     className="w-full mb-2"
                     color="primary"
-                    onClick={() => {
-                        window.api.loadNodes()
-                    }}
+                    onClick={() => {window.api.workspace.save("obiekcik")}}
                 >
                     TEST BUTTON(nie dotykać)
                 </Button>
