@@ -123,6 +123,13 @@ const SidePanel = () => {
                 <Button
                     className="w-full mb-2"
                     color="primary"
+                    onClick={() => {window.api.loadNodes()}}
+                >
+                    TEST BUTTON(nie dotykać)
+                </Button>
+                <Button
+                    className="w-full mb-2"
+                    color="primary"
                     onClick={() => {}}
                 >
                     Start workflow
