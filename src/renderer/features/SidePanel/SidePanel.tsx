@@ -7,15 +7,17 @@ import {
     ScrollShadow,
     Tooltip,
 } from "@nextui-org/react"
+import { useEffect } from "react"
 import { toast } from "sonner"
 
+import { NodeStatus } from "../../../data/configuration-file.interface"
 import { setApp, setWorkspace } from "../../store/appSlice"
 import { useDispatch, useSelector } from "../../store/store"
-import { clearWorkflow } from "../../store/workflowSlice"
-import { useEffect } from "react"
+import { addNode, clearWorkflow } from "../../store/workflowSlice"
 
 const SidePanel = () => {
     const workspace = useSelector((state) => state.app.workspace)
+    const viewport = useSelector((state) => state.viewport)
     const dispatch = useDispatch()
 
     // for test purposes
@@ -26,7 +28,7 @@ const SidePanel = () => {
     }, [])
 
     return (
-        <nav className="grid grid-rows-[1fr_auto] h-full">
+        <nav className="grid grid-rows-[1fr_auto] h-full ">
             <div className="my-2 overflow-x-hidden">
                 <p className="text-small text-default-400">Current workspace</p>
                 <Tooltip
@@ -52,6 +54,19 @@ const SidePanel = () => {
                                     key="import-image"
                                     onClick={() => {
                                         toast("Import image")
+                                        dispatch(
+                                            addNode({
+                                                id: Date.now().toString(),
+                                                data: {
+                                                    status: NodeStatus.PENDING,
+                                                },
+                                                type: "operation",
+                                                position: {
+                                                    x: viewport.x + 100,
+                                                    y: viewport.y + 100,
+                                                },
+                                            }),
+                                        )
                                     }}
                                 >
                                     Import image
@@ -97,7 +112,7 @@ const SidePanel = () => {
                 </Accordion>
             </div>
             <div className="my-2">
-            <Button
+                <Button
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {window.api.workspace.save("obiekcik")}}

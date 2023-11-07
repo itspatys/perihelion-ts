@@ -10,7 +10,12 @@ const App = () => {
     return (
         <Provider store={store}>
             <NextUIProvider>
-                <Toaster position="top-right" offset="32px" />
+                <Toaster
+                    position="top-right"
+                    style={{
+                        transform: "translateY(32px)",
+                    }}
+                />
                 <Main />
             </NextUIProvider>
         </Provider>

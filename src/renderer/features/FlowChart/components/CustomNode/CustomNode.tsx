@@ -5,22 +5,25 @@ import {
     CardHeader,
     Divider,
 } from "@nextui-org/react"
-import { Play } from "@styled-icons/fa-solid/Play"
 import { Handle, Position } from "reactflow"
 
-const StartNode = () => {
+const CustomNode = () => {
     return (
-        <Card className="w-[128px]">
-            <CardHeader className="h-[32px]">Start</CardHeader>
+        <Card>
+            <CardHeader>Custom node</CardHeader>
             <Divider />
-            <CardBody className="h-[95px]">
-                <Play className="text-success-500" size="48" />
-            </CardBody>
+            <CardBody>Custom node</CardBody>
             <Divider />
-            <CardFooter className="h-[32px]">Starting node</CardFooter>
+            <CardFooter>Bottom text</CardFooter>
             <Handle
                 type="source"
                 position={Position.Right}
+                className="w-3.5 h-3.5"
+                id="a"
+            />
+            <Handle
+                type="target"
+                position={Position.Left}
                 className="w-3.5 h-3.5"
                 id="a"
             />
@@ -28,4 +31,4 @@ const StartNode = () => {
     )
 }
 
-export default StartNode
+export default CustomNode
