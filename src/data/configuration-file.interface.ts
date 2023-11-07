@@ -14,6 +14,11 @@ export interface NodeData {
 
 export type NodeTypes = "start" | "operation"
 
+export enum NodeType {
+    START = "start",
+    OPERATION = "operation",
+}
+
 export interface ConfigurationFile {
     nodes: Node<NodeData, NodeTypes>[]
     edges: Edge[]
