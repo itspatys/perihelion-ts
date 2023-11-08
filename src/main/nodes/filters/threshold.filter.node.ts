@@ -1,6 +1,6 @@
 import { cv } from "opencv-wasm"
 
-import { Filter } from "../../../data/filter.interface"
+import { Operation } from "../../../data/operation.interface"
 import { loadImg, saveImg } from "../../utils/img.util"
 
 const threshold = async (filePath: string, args: ThresholdArgs) => {
@@ -80,16 +80,25 @@ interface ThresholdArgs {
     type: ThresholdTypes[keyof ThresholdTypes]
 }
 
-const filter: Filter<ThresholdArgs> = {
+const filter: Operation<ThresholdArgs> = {
     init: (filePath: string, args: ThresholdArgs) => threshold(filePath, args),
     label: "Threshold",
+    name: "threshold",
     type: "filter",
     subtype: "threshold",
     description: "Applies threshold to image",
     parameters: [
         {
+            label: "Input",
+            type: "input",
+            name: "input",
+            description: "input",
+            default: 0,
+        },
+        {
             label: "Threshold",
             type: "number",
+            name: "threshold",
             description: "Threshold",
             default: 0,
             range: [0, 255],
@@ -98,6 +107,7 @@ const filter: Filter<ThresholdArgs> = {
         {
             label: "Max Value",
             type: "number",
+            name: "max-value",
             description: "Max Value",
             default: 255,
             range: [0, 255],
@@ -105,17 +115,25 @@ const filter: Filter<ThresholdArgs> = {
         },
         {
             label: "Type",
+            name: "type",
             type: "enum",
             description: "Type",
             default: 0,
             options: [
-                { label: "Binary", value: 0 },
-                { label: "Binary Inverted", value: 1 },
-                { label: "Truncated", value: 2 },
-                { label: "To Zero", value: 3 },
-                { label: "Otsu", value: 4 },
-                { label: "Triangle", value: 5 },
+                { name: "binary", value: 0, label: "Binary" },
+                { name: "binary-inverted", value: 1, label: "Binary Inverted" },
+                { name: "truncated", value: 2, label: "Truncated" },
+                { name: "to-zero", value: 3, label: "To Zero" },
+                { name: "otsu", value: 4, label: "Otsu" },
+                { name: "triangle", value: 5, label: "Triangle" },
             ],
+        },
+        {
+            label: "Output",
+            type: "output",
+            name: "output",
+            description: "Output",
+            default: 0,
         },
     ],
 }

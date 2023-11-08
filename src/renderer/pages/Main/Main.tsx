@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import TitleBar from "../../layouts/TitleBar"
 import { useSelector } from "../../store/store"
 import Flow from "../Flow"
+import Loading from "../Loading"
 import OpenScreen from "../OpenScreen"
 
 const Main = () => {
@@ -26,8 +27,15 @@ const Main = () => {
             )}
         >
             <TitleBar />
-            {appState === "open" ? <OpenScreen /> : <></>}
-            {appState === "flow" ? <Flow /> : <></>}
+            {appState === "open" ? (
+                <OpenScreen />
+            ) : appState === "flow" ? (
+                <Flow />
+            ) : appState === "loading" ? (
+                <Loading />
+            ) : (
+                <></>
+            )}
         </main>
     )
 }

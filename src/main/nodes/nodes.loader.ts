@@ -5,6 +5,7 @@ import path from "path"
 import { PreloadChannels } from "../../data/preload.channels"
 
 export async function nodesLoader(browserWindow: BrowserWindow) {
+    let nodesJSON = ""
     try {
         const files = await fs.readdir(path.join(process.cwd(), ".vite/build"))
         const filters = []
@@ -18,15 +19,19 @@ export async function nodesLoader(browserWindow: BrowserWindow) {
         }
         console.log(filters)
         fs.writeFile("nodes.json", JSON.stringify(filters))
-        browserWindow.webContents.send(
-            PreloadChannels.nodesHandleLoad,
-            JSON.stringify(filters),
-        )
-        return filters
+        // browserWindow.webContents.send(
+        //     PreloadChannels.nodesHandleLoad,
+        //     JSON.stringify(filters),
+        // )
+        // return filters
+
+        nodesJSON = JSON.stringify(filters)
     } catch (error) {
         console.log(error)
-        return {}
+        // return {}
     }
+
+    return nodesJSON
 
     /* await fs.readdir(
         path.join(process.cwd(), ".vite/build"),

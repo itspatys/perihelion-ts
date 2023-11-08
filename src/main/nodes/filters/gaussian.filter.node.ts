@@ -1,6 +1,6 @@
 import { cv } from "opencv-wasm"
 
-import { Filter } from "../../../data/filter.interface"
+import { Operation } from "../../../data/operation.interface"
 import { loadImg, saveImg } from "../../utils/img.util"
 
 const gaussian = async (filePath: string, args: GaussianArgs) => {
@@ -26,15 +26,24 @@ interface GaussianArgs {
     kernelY: number
 }
 
-const filter: Filter<GaussianArgs> = {
+const filter: Operation<GaussianArgs> = {
     init: (filePath: string, args: GaussianArgs) => gaussian(filePath, args),
+    name: "gaussian",
     label: "Gaussian",
     type: "filter",
     subtype: "gaussian",
     description: "Applies gaussian blur to image",
     parameters: [
         {
+            label: "Input",
+            type: "input",
+            name: "input",
+            description: "input",
+            default: 0,
+        },
+        {
             label: "Sigma X",
+            name: "sigma-x",
             type: "number",
             description: "Sigma X",
             default: 0,
@@ -43,6 +52,7 @@ const filter: Filter<GaussianArgs> = {
         },
         {
             label: "Sigma Y",
+            name: "sigma-y",
             type: "number",
             description: "Sigma Y",
             default: 0,
@@ -51,6 +61,7 @@ const filter: Filter<GaussianArgs> = {
         },
         {
             label: "Kernel X",
+            name: "kernel-x",
             type: "number",
             description: "Kernel X",
             default: 1,
@@ -59,11 +70,19 @@ const filter: Filter<GaussianArgs> = {
         },
         {
             label: "Kernel Y",
+            name: "kernel-y",
             type: "number",
             description: "Kernel Y",
             default: 1,
             range: [1, 100],
             step: 1,
+        },
+        {
+            label: "Output",
+            type: "output",
+            name: "output",
+            description: "Output",
+            default: 0,
         },
     ],
 }

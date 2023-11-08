@@ -1,6 +1,7 @@
 import { cv } from "opencv-wasm"
+
+import { Operation } from "../../../data/operation.interface"
 import { loadImg, saveImg } from "../../utils/img.util"
-import { Filter } from "../../../data/filter.interface"
 
 const bw = async (filePath: string) => {
     const mat = await loadImg(filePath)
@@ -10,11 +11,28 @@ const bw = async (filePath: string) => {
     saveImg(mat, savePath)
 }
 
-const filter: Filter = {
+const filter: Operation = {
     init: (filePath: string) => bw(filePath),
+    name: "bw",
     label: "Black and White",
     type: "filter",
     subtype: "color change",
-    description: "Converts image to black and white",
+    description: "Image to B/W",
+    parameters: [
+        {
+            label: "Input",
+            type: "input",
+            name: "input",
+            description: "input",
+            default: 0,
+        },
+        {
+            label: "Output",
+            type: "output",
+            name: "output",
+            description: "Output",
+            default: 0,
+        },
+    ],
 }
-module.exports = filter;
+module.exports = filter
