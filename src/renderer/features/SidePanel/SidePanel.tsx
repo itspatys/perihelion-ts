@@ -7,10 +7,12 @@ import {
     ScrollShadow,
     Tooltip,
 } from "@nextui-org/react"
-import { useEffect } from "react"
+import groupBy from "object.groupby"
+// import { useEffect } from "react"
 import { toast } from "sonner"
+import { v4 } from "uuid"
 
-import { NodeStatus } from "../../../data/configuration-file.interface"
+import { Node, NodeStatus } from "../../../data/configuration-file.interface"
 import { setApp, setWorkspace } from "../../store/appSlice"
 import { useDispatch, useSelector } from "../../store/store"
 import { addNode, clearWorkflow } from "../../store/workflowSlice"
@@ -19,14 +21,15 @@ const SidePanel = () => {
     const workspace = useSelector((state) => state.app.workspace)
     const viewport = useSelector((state) => state.viewport)
     const workflow = useSelector((state) => state.workflow)
+    const operations = useSelector((state) => state.operations)
     const dispatch = useDispatch()
 
     // for test purposes
-    useEffect(() => {
-        window.api.handleLoadNodes((event: any, value: any) => {
-            console.log(value)
-        })
-    }, [])
+    // useEffect(() => {
+    //     window.api.handleLoadNodes((event: any, value: any) => {
+    //         console.log(value)
+    //     })
+    // }, [])
 
     return (
         <nav className="grid grid-rows-[1fr_auto] h-full ">
@@ -45,85 +48,74 @@ const SidePanel = () => {
                     </Button>
                 </Tooltip>
                 <Accordion className="text-foreground" isCompact>
-                    <AccordionItem
-                        aria-label="Input/Output"
-                        startContent="Input/Output"
-                    >
-                        <ScrollShadow className="h-36">
-                            <Listbox>
-                                <ListboxItem
-                                    key="import-image"
-                                    onClick={() => {
-                                        toast("Import image")
-                                        dispatch(
-                                            addNode({
-                                                id: Date.now().toString(),
-                                                data: {
-                                                    status: NodeStatus.PENDING,
-                                                },
-                                                type: "operation",
-                                                position: {
-                                                    x: viewport.x + 100,
-                                                    y: viewport.y + 100,
-                                                },
-                                            }),
-                                        )
-                                    }}
-                                >
-                                    Import image
-                                </ListboxItem>
-                                <ListboxItem key="2">
-                                    Change colorspace
-                                </ListboxItem>
-                                <ListboxItem key="3">Change format</ListboxItem>
-                            </Listbox>
-                        </ScrollShadow>
-                    </AccordionItem>
-                    <AccordionItem
-                        aria-label="Image transformation"
-                        startContent="Image transformation"
-                    >
-                        <ScrollShadow className="h-36">
-                            <Listbox>
-                                <ListboxItem key="Scale">
-                                    Import image
-                                </ListboxItem>
-                            </Listbox>
-                        </ScrollShadow>
-                    </AccordionItem>
-                    <AccordionItem aria-label="Filters" startContent="Filters">
-                        <ScrollShadow className="h-36">
-                            <Listbox>
-                                <ListboxItem key="1">Gaussian</ListboxItem>
-                                <ListboxItem key="2">Previtt</ListboxItem>
-                            </Listbox>
-                        </ScrollShadow>
-                    </AccordionItem>
-                    <AccordionItem aria-label="Math" startContent="Math">
-                        <ScrollShadow className="h-36">
-                            <Listbox>
-                                <ListboxItem key="1">Add</ListboxItem>
-                                <ListboxItem key="2">Subtract</ListboxItem>
-                                <ListboxItem key="3">Multiple</ListboxItem>
-                                <ListboxItem key="4">Divide</ListboxItem>
-                                <ListboxItem key="5">Binarize</ListboxItem>
-                            </Listbox>
-                        </ScrollShadow>
-                    </AccordionItem>
+                    {Object.entries(groupBy(operations, (o) => o.type)).map(
+                        ([type, operations]) => (
+                            <AccordionItem
+                                startContent={
+                                    type === "filter" ? "Filters" : "type"
+                                }
+                                aria-label={type}
+                                key={type}
+                            >
+                                <ScrollShadow className="h-36">
+                                    <Listbox>
+                                        {operations.map((operation) => (
+                                            <ListboxItem
+                                                key={operation.label}
+                                                onClick={() => {
+                                                    const node: Node = {
+                                                        id: v4(),
+                                                        position: {
+                                                            x: viewport.x + 100,
+                                                            y: viewport.y + 100,
+                                                        },
+                                                        data: {
+                                                            status: NodeStatus.PENDING,
+                                                            operation: {
+                                                                name: operation.name,
+                                                                parameters:
+                                                                    operation.parameters &&
+                                                                    operation.parameters.map(
+                                                                        (
+                                                                            p,
+                                                                        ) => ({
+                                                                            name: p.name,
+                                                                            value: p.default,
+                                                                        }),
+                                                                    ),
+                                                            },
+                                                        },
+                                                        type: "operation",
+                                                    }
+                                                    dispatch(addNode(node))
+                                                }}
+                                            >
+                                                {operation.label}
+                                            </ListboxItem>
+                                        ))}
+                                    </Listbox>
+                                </ScrollShadow>
+                            </AccordionItem>
+                        ),
+                    )}
                 </Accordion>
             </div>
             <div className="my-2">
                 <Button
                     className="w-full mb-2"
                     color="primary"
-                    onClick={() => {window.api.workspace.save(workflow)}}
+                    onClick={() => {
+                        window.api.workspace.save(workflow)
+                    }}
                 >
                     TEST BUTTON(nie dotykać)
                 </Button>
                 <Button
                     className="w-full mb-2"
                     color="primary"
-                    onClick={() => {window.api.loadNodes()}}
+                    onClick={() => {
+                        // window.api.loadNodes()
+                    }}
                 >
                     TEST BUTTON(nie dotykać)
                 </Button>

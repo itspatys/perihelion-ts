@@ -1,6 +1,5 @@
 import { Button, Modal, ModalBody, ModalContent } from "@nextui-org/react"
 import { useDispatch } from "react-redux"
-import { toast } from "sonner"
 
 import { setApp, setWorkspace } from "../../store/appSlice"
 import { Logo } from "./components/Logo"
@@ -22,10 +21,9 @@ const OpenScreen = () => {
                         <Logo />
                         <Button
                             onClick={async () => {
-                                const path = await window.api.workspace.load()
-                                dispatch(setApp("flow"))
+                                const path = await window.api.workspace.open()
+                                dispatch(setApp("loading"))
                                 dispatch(setWorkspace(path))
-                                toast.success("Project loaded successfully")
                             }}
                         >
                             Open existing project

@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice, original } from "@reduxjs/toolkit"
 import { NodeChange } from "reactflow"
 import type { Connection, EdgeChange, NodePositionChange } from "reactflow"
 
@@ -6,6 +6,7 @@ import {
     ConfigurationFile,
     NodeStatus,
 } from "../../data/configuration-file.interface"
+import { OperationParameterOptions } from "../../data/operation.interface"
 
 const isNodePositionChange = (
     change: NodeChange,
@@ -14,16 +15,7 @@ const isNodePositionChange = (
 }
 
 const initialState: ConfigurationFile = {
-    nodes: [
-        {
-            id: "start",
-            position: { x: 0, y: 0 },
-            data: {
-                status: NodeStatus.PENDING,
-            },
-            type: "start",
-        },
-    ],
+    nodes: [],
     edges: [],
     workspacePath: "",
 }
@@ -32,8 +24,8 @@ const workflowSlice = createSlice({
     name: "workflow",
     initialState: initialState,
     reducers: {
-        setWorkflow: (state, action: PayloadAction<ConfigurationFile>) => {
-            state = action.payload
+        setWorkflow: (_, action: PayloadAction<string>) => {
+            return JSON.parse(action.payload)
         },
         setNodes: (
             state,
@@ -62,6 +54,19 @@ const workflowSlice = createSlice({
                 })
             }
         },
+        updateNodeParameter: (
+            state,
+            action: PayloadAction<{
+                id: string
+                parameter: Partial<OperationParameterOptions>
+            }>,
+        ) => {
+            state.nodes
+                .find((n) => n.id === action.payload.id)
+                .data.operation.parameters.find(
+                    (o) => o.name === action.payload.parameter.name,
+                ).value = action.payload.parameter.value
+        },
         setEdges: (
             state,
             action: PayloadAction<ConfigurationFile["edges"]>,
@@ -73,6 +78,8 @@ const workflowSlice = createSlice({
                 id: Date.now().toString(),
                 source: action.payload.source,
                 target: action.payload.target,
+                sourceHandle: action.payload.sourceHandle,
+                targetHandle: action.payload.targetHandle,
             })
         },
         clearWorkflow: (state) => {
@@ -89,5 +96,6 @@ export const {
     setNode,
     addNode,
     addEdge,
+    updateNodeParameter,
 } = workflowSlice.actions
 export default workflowSlice.reducer

@@ -12,5 +12,18 @@
         "plugin:import/electron",
         "plugin:import/typescript"
     ],
-    "parser": "@typescript-eslint/parser"
+    "parser": "@typescript-eslint/parser",
+    "overrides": [
+        {
+            "files": ["src/**/*Slice.ts"],
+            "rules": {
+                "no-param-reassign": [
+                    "error",
+                    {
+                        "props": false
+                    }
+                ]
+            }
+        }
+    ]
 }

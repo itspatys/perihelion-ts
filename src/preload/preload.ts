@@ -14,16 +14,20 @@ const api = {
         ipcRenderer.send("click")
     },
 
-    loadNodes: () => ipcRenderer.send(PreloadChannels.nodesLoad),
     handleLoadNodes: (callback: any) =>
         ipcRenderer.on(PreloadChannels.nodesHandleLoad, callback),
 
+    operations: {
+        load: (): Promise<string> =>
+            ipcRenderer.invoke(PreloadChannels.nodesLoad),
+    },
+
     workspace: {
         create: () => ipcRenderer.send(PreloadChannels.workspaceCreate),
+        open: (): Promise<string> =>
+            ipcRenderer.invoke(PreloadChannels.workspaceOpen),
         load: (): Promise<string> =>
             ipcRenderer.invoke(PreloadChannels.workspaceLoad),
-        handleLoad: (callback: any) =>
-            ipcRenderer.invoke(PreloadChannels.workspaceHandleLoad, callback),
         save: (args: ConfigurationFile) =>
             ipcRenderer.send(PreloadChannels.workspaceSave, args),
     },

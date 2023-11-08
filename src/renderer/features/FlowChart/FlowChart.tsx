@@ -10,12 +10,12 @@ import ReactFlow, {
 import { useDispatch, useSelector } from "../../store/store"
 import { setViewport } from "../../store/viewportSlice"
 import { addEdge, setNode } from "../../store/workflowSlice"
-import CustomNode from "./components/CustomNode"
+import OperationNode from "./components/OperationNode"
 import StartNode from "./components/StartNode"
 
 const nodeTypes = {
     start: StartNode,
-    operation: CustomNode,
+    operation: OperationNode,
 }
 
 const FlowChart = () => {

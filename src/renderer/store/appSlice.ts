@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 interface AppState {
-    appState: "open" | "flow"
+    appState: "open" | "flow" | "loading"
     workspace: string | null
 }
 

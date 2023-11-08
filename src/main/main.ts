@@ -8,6 +8,7 @@ import { nodesLoader } from "./nodes/nodes.loader"
 import { workflowRunner } from "./workflow/workflow-runner"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { workspaceLoad } from "./workspace/workspace.load"
+import { workspaceOpen } from "./workspace/workspace.open"
 import { workspaceSave } from "./workspace/workspace.save"
 
 config()
@@ -111,7 +112,7 @@ ipcMain.on("click", async (event) => {
     workflowRunner(browserWindow)
 })
 
-ipcMain.on(PreloadChannels.nodesLoad, async (event) => {
+ipcMain.handle(PreloadChannels.nodesLoad, async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
     return nodesLoader(browserWindow)
@@ -121,11 +122,14 @@ ipcMain.on(PreloadChannels.workspaceCreate, async () => {
     workspaceCreate()
 })
 
-ipcMain.handle(PreloadChannels.workspaceLoad, async (event) => {
+ipcMain.handle(PreloadChannels.workspaceOpen, async (event) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
+    return await workspaceOpen(browserWindow)
+})
 
-    return workspaceLoad(browserWindow)
+ipcMain.handle(PreloadChannels.workspaceLoad, async (event) => {
+    return await workspaceLoad()
 })
 
 ipcMain.on(PreloadChannels.workspaceSave, async (event, args) => {
