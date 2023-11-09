@@ -10,7 +10,7 @@ import {
     Slider,
 } from "@nextui-org/react"
 import clsx from "clsx"
-import { useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Handle, Position } from "reactflow"
 
 import {
@@ -50,30 +50,54 @@ const OperationNode = (nodeProps: Node) => {
                 {operation.parameters
                     ? operation.parameters.map((p) => {
                           return p.type === "number" ? (
-                              <Slider
-                                  key={p.name}
-                                  size="sm"
-                                  label={p.label}
-                                  step={p.step}
-                                  minValue={p.range[0]}
-                                  maxValue={p.range[1]}
-                                  value={
+                              (() => {
+                                  const [value, setValue] = useState(
                                       nodeProps.data.operation.parameters.find(
                                           (o) => o.name === p.name,
-                                      ).value as number
-                                  }
-                                  onChange={(v) => {
-                                      if (typeof v !== "number") {
-                                          return
-                                      }
-                                      console.log()
+                                      ).value as number,
+                                  )
+
+                                  useEffect(() => {
                                       setParameterValue(nodeProps.id, {
                                           name: p.name,
-                                          value: v,
+                                          value: value,
                                       })
-                                  }}
-                                  className="h-[calc(32px*2)]"
-                              />
+                                  }, [value])
+
+                                  return (
+                                      <Slider
+                                          key={p.name}
+                                          size="sm"
+                                          label={p.label}
+                                          step={p.step}
+                                          defaultValue={value}
+                                          minValue={p.range[0]}
+                                          maxValue={p.range[1]}
+                                          onChangeEnd={(v) => {
+                                              if (typeof v === "object") {
+                                                  setValue(v[0])
+                                                  return
+                                              }
+
+                                              if (typeof v === "number") {
+                                                  setValue(v)
+                                                  return
+                                              }
+                                          }}
+                                          className="h-[calc(32px*2)]"
+                                          marks={[
+                                              {
+                                                  value: p.range[0],
+                                                  label: p.range[0] + "",
+                                              },
+                                              {
+                                                  value: p.range[1],
+                                                  label: p.range[1] + "",
+                                              },
+                                          ]}
+                                      />
+                                  )
+                              })()
                           ) : p.type === "enum" ? (
                               (() => {
                                   const selectedKey =
@@ -116,6 +140,7 @@ const OperationNode = (nodeProps: Node) => {
                                       "h-[32px] relative",
                                       p.type === "output" && "text-right",
                                   )}
+                                  key={p.name}
                               >
                                   <Chip>{p.label}</Chip>
                                   <Handle

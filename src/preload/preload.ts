@@ -5,19 +5,14 @@ import { ConfigurationFile } from "../data/configuration-file.interface"
 import { PreloadChannels } from "../data/preload.channels"
 
 const api = {
-    openFile: () => {
-        ipcRenderer.send("open-file")
-    },
-    handleCounter: (callback: any) =>
-        ipcRenderer.on("update-counter", callback),
-    click: () => {
-        ipcRenderer.send("click")
-    },
-
-    handleLoadNodes: (callback: any) =>
-        ipcRenderer.on(PreloadChannels.nodesHandleLoad, callback),
+    // handleLoadNodes: (callback: any) =>
+    //     ipcRenderer.on(PreloadChannels.nodesHandleLoad, callback),
 
     operations: {
+        /**
+         *
+         * @returns JSON string of available operations
+         */
         load: (): Promise<string> =>
             ipcRenderer.invoke(PreloadChannels.nodesLoad),
     },
@@ -26,6 +21,10 @@ const api = {
         create: () => ipcRenderer.send(PreloadChannels.workspaceCreate),
         open: (): Promise<string> =>
             ipcRenderer.invoke(PreloadChannels.workspaceOpen),
+        /**
+         *
+         * @returns JSON string of saved workflow from config file
+         */
         load: (): Promise<string> =>
             ipcRenderer.invoke(PreloadChannels.workspaceLoad),
         save: (args: ConfigurationFile) =>
