@@ -7,11 +7,14 @@ import {
 
 import app from "./appSlice"
 import operations from "./operationsSlice"
+import { saveMiddleware } from "./saveMiddleware"
 import viewport from "./viewportSlice"
 import workflow from "./workflowSlice"
 
 const store = configureStore({
     reducer: { app, workflow, viewport, operations },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().prepend(saveMiddleware),
 })
 
 export type Dispatch = typeof store.dispatch

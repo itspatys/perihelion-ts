@@ -2,6 +2,7 @@ import { clsx } from "clsx"
 import { useEffect, useState } from "react"
 
 import TitleBar from "../../layouts/TitleBar"
+import { useDispatch } from "../../store/store"
 import { useSelector } from "../../store/store"
 import Flow from "../Flow"
 import Loading from "../Loading"
@@ -9,6 +10,7 @@ import OpenScreen from "../OpenScreen"
 
 const Main = () => {
     const appState = useSelector((state) => state.app.appState)
+
     const [isDark, setIsDark] = useState(false)
 
     useEffect(() => {

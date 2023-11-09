@@ -20,7 +20,7 @@ const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 1280,
         height: 720,
-        minWidth: 1280,
+        minWidth: 720,
         minHeight: 720,
         titleBarStyle: "hidden",
         titleBarOverlay:
@@ -33,6 +33,7 @@ const createWindow = () => {
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
         },
+        backgroundColor: "black",
     })
     //move window to second screen
 
