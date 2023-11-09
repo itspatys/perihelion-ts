@@ -105,19 +105,19 @@ const SidePanel = () => {
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        window.api.workspace.save(workflow)
+                        window.api.nodes.process({id: "test-1", inputIds: ["test"], params: {sigmaX: 1, sigmaY: 1, kernelY: 1, kernelX: 1}, name: "gaussian"})
                     }}
                 >
-                    TEST BUTTON(nie dotykać)
+                    Process gaussian node
                 </Button>
                 <Button
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        // window.api.loadNodes()
+                        window.api.nodes.process({id: "fiutek", params: {}, name: "input"})
                     }}
                 >
-                    TEST BUTTON(nie dotykać)
+                    Input node
                 </Button>
                 <Button
                     className="w-full mb-2"

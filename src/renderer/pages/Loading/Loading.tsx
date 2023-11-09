@@ -18,8 +18,8 @@ const Loading = () => {
     const [showCancel, setShowCancel] = useState(false)
 
     const load = useCallback(async () => {
-        const nodesJSON = await window.api.operations.load()
-        const workflowJSON = await window.api.workspace.load()
+        const nodesJSON = await window.api.nodes.load()
+        const workflowJSON = await window.api.nodes.load()
 
         dispatch(setOperations(nodesJSON))
         dispatch(setWorkflow(workflowJSON))

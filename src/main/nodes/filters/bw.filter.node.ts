@@ -1,38 +1,39 @@
-import { cv } from "opencv-wasm"
+import { cv } from "opencv-wasm";
 
-import { Operation } from "../../../data/operation.interface"
-import { loadImg, saveImg } from "../../utils/img.util"
 
-const bw = async (filePath: string) => {
-    const mat = await loadImg(filePath)
+
+import { Node, NodeBaseFunctionParameters, NodeParameterTypesEnum, NodeTypesEnum } from "../../../data/node.interface";
+import { loadImg, saveImg } from "../../utils/img.util";
+
+
+const bw = async (args: BwArgs) => {
+    const mat = await loadImg(args.inputFilePath[0])
     await cv.cvtColor(mat, mat, cv.COLOR_BGR2GRAY)
-    const savePath =
-        "C:\\Users\\filip\\Desktop\\perihelion_workflow\\img_out.jpg"
-    saveImg(mat, savePath)
+    saveImg(mat, args.outputFilePath[0])
 }
 
-const filter: Operation = {
-    init: (filePath: string) => bw(filePath),
+type BwArgs = NodeBaseFunctionParameters
+
+const node: Node<BwArgs> = {
+    init: (args: BwArgs) => bw(args),
     name: "bw",
     label: "Black and White",
-    type: "filter",
+    type: NodeTypesEnum.FILTER,
     subtype: "color change",
     description: "Image to B/W",
     parameters: [
         {
             label: "Input",
-            type: "input",
+            type: NodeParameterTypesEnum.INPUT,
             name: "input",
             description: "input",
-            default: 0,
         },
         {
             label: "Output",
-            type: "output",
+            type: NodeParameterTypesEnum.OUTPUT,
             name: "output",
             description: "Output",
-            default: 0,
         },
     ],
 }
-module.exports = filter
+module.exports = node

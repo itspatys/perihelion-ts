@@ -6,7 +6,6 @@ import { NodeData } from "../data/configuration-file.interface"
 
 export enum StoreValues {
     workspacePath = "workspacePath",
-    edges = "edges",
     nodes = "nodes",
 }
 

@@ -17,7 +17,7 @@ import {
     Node,
     NodeStatus,
 } from "../../../../../data/configuration-file.interface"
-import { OperationParameterOptions } from "../../../../../data/operation.interface"
+import { NodeParameterOptions as OperationParameterOptions } from "../../../../../data/node.interface"
 import { useDispatch, useSelector } from "../../../../store/store"
 import { updateNodeParameter } from "../../../../store/workflowSlice"
 
