@@ -19,6 +19,11 @@ const api = {
         load: async (): Promise<string> =>
             ipcRenderer.invoke(PreloadChannels.nodesLoad),
         /**
+         * Invokes file dialog to select image
+         */
+        loadImage: async (inputName: string) =>
+            ipcRenderer.invoke(PreloadChannels.nodesLoadImage, inputName),
+        /**
          *
          * @returns Promise<boolean> whether the process was successful
          */

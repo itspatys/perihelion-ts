@@ -12,6 +12,9 @@ import { workspaceCreate } from "./workspace/workspace.create";
 import { workspaceLoad } from "./workspace/workspace.load";
 import { workspaceOpen } from "./workspace/workspace.open";
 import { workspaceSave } from "./workspace/workspace.save";
+import { showOpenFileDialog } from "./utils/file";
+import { loadImg, saveImg } from "./utils/img.util";
+import { StoreValues, store } from "./store";
 
 
 config()
@@ -130,6 +133,15 @@ ipcMain.handle(
         return nodeProcess(args, browserWindow)
     },
 )
+
+ipcMain.handle(PreloadChannels.nodesLoadImage, async (event, inputName) => {
+    const browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow) return
+    const mat = await loadImg(await showOpenFileDialog(browserWindow))
+    const workspacePath = store.get(StoreValues.workspacePath)
+    const imgPath = path.join(workspacePath, inputName+'.png')
+    saveImg(mat, imgPath)
+})
 
 /*
  __          ______  _____  _  __ _____ _____        _____ ______ 

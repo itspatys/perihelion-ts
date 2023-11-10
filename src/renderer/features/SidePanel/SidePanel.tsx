@@ -133,14 +133,10 @@ const SidePanel = () => {
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        window.api.nodes.process({
-                            id: "fiutek",
-                            params: {},
-                            name: "input",
-                        })
+                        window.api.nodes.loadImage('hihi')
                     }}
                 >
-                    Input node
+                    Load Image
                 </Button>
                 <Button
                     className="w-full mb-2"

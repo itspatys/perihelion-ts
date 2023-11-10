@@ -6,6 +6,7 @@ export enum PreloadChannels {
     workspaceOpen = "workspaceOpen",
 
     nodesLoad = "nodesLoad",
+    nodesLoadImage = "nodesLoadImage",
     nodesHandleLoad = "nodesHandleLoad",
     nodesProcess = "nodesProcess",
 }
