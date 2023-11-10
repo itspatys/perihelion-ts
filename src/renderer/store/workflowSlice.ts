@@ -56,6 +56,19 @@ const workflowSlice = createSlice({
             }
         },
         deleteNode: (state, action: PayloadAction<string>) => {
+            const edgesFromNode = state.edges.filter(
+                (edge) => edge.source === action.payload,
+            )
+            edgesFromNode.forEach((edge) => {
+                const targetNode = state.nodes.find(
+                    (node) => node.id === edge.target,
+                )
+                const input = targetNode.data.operation.parameters.find(
+                    (param) => param.name === edge.targetHandle,
+                )
+                input.value = undefined
+            })
+
             state.nodes = state.nodes.filter(
                 (node) => node.id !== action.payload,
             )
@@ -93,8 +106,28 @@ const workflowSlice = createSlice({
                 sourceHandle: action.payload.sourceHandle,
                 targetHandle: action.payload.targetHandle,
             })
+
+            const target = state.nodes.find(
+                (node) => node.id === action.payload.target,
+            )
+
+            const targetInputParam = target.data.operation.parameters.find(
+                (param) => param.name === action.payload.targetHandle,
+            )
+
+            targetInputParam.value = action.payload.source
         },
         deleteEdge: (state, action: PayloadAction<string>) => {
+            const edge = state.edges.find((edge) => edge.id === action.payload)
+            const targetNode = state.nodes.find(
+                (node) => node.id === edge.target,
+            )
+            const input = targetNode.data.operation.parameters.find(
+                (parameter) => parameter.name === edge.targetHandle,
+            )
+
+            input.value = undefined
+
             state.edges = state.edges.filter(
                 (edge) => edge.id !== action.payload,
             )
