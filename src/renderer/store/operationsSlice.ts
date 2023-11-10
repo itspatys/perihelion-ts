@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
-import { Operation } from "../../data/operation.interface"
+import { Node as Operation } from "../../data/node.interface"
 
 const initialState: Operation[] = []
 

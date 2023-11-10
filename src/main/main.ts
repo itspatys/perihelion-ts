@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { config } from "dotenv"
-import { BrowserWindow, app, ipcMain, screen, session } from "electron"
-import path from "path"
+import { config } from "dotenv";
+import { BrowserWindow, app, ipcMain, screen, session } from "electron";
+import path from "path";
 
-import { PreloadChannels } from "../data/preload.channels"
-import { nodesLoader } from "./nodes/nodes.loader"
-import { workflowRunner } from "./workflow/workflow-runner"
-import { workspaceCreate } from "./workspace/workspace.create"
-import { workspaceLoad } from "./workspace/workspace.load"
-import { workspaceOpen } from "./workspace/workspace.open"
-import { workspaceSave } from "./workspace/workspace.save"
+
+
+import { PreloadChannels } from "../data/preload.channels";
+import { NodeProcessArgs, nodeProcess } from "./nodes/node.process";
+import { nodesLoader } from "./nodes/nodes.loader";
+import { workspaceCreate } from "./workspace/workspace.create";
+import { workspaceLoad } from "./workspace/workspace.load";
+import { workspaceOpen } from "./workspace/workspace.open";
+import { workspaceSave } from "./workspace/workspace.save";
+
 
 config()
 if (require("electron-squirrel-startup")) {
@@ -106,19 +109,36 @@ app.on("activate", () => {
     }
 })
 
-ipcMain.on("click", async (event) => {
-    const browserWindow = BrowserWindow.fromWebContents(event.sender)
-    if (!browserWindow) return
+/*
+  _   _  ____  _____  ______  _____ 
+ | \ | |/ __ \|  __ \|  ____|/ ____|
+ |  \| | |  | | |  | | |__  | (___  
+ | . ` | |  | | |  | |  __|  \___ \ 
+ | |\  | |__| | |__| | |____ ____) |
+ |_| \_|\____/|_____/|______|_____/ 
+*/
 
-    workflowRunner(browserWindow)
+ipcMain.handle(PreloadChannels.nodesLoad, async () => {
+    return nodesLoader()
 })
 
-ipcMain.handle(PreloadChannels.nodesLoad, async (event) => {
-    const browserWindow = BrowserWindow.fromWebContents(event.sender)
-    if (!browserWindow) return
-    return nodesLoader(browserWindow)
-})
+ipcMain.handle(
+    PreloadChannels.nodesProcess,
+    async (event, args: NodeProcessArgs) => {
+        const browserWindow = BrowserWindow.fromWebContents(event.sender)
+        if (!browserWindow) return
+        return nodeProcess(args, browserWindow)
+    },
+)
 
+/*
+ __          ______  _____  _  __ _____ _____        _____ ______ 
+ \ \        / / __ \|  __ \| |/ // ____|  __ \ /\   / ____|  ____|
+  \ \  /\  / / |  | | |__) | ' /| (___ | |__) /  \ | |    | |__   
+   \ \/  \/ /| |  | |  _  /|  <  \___ \|  ___/ /\ \| |    |  __|  
+    \  /\  / | |__| | | \ \| . \ ____) | |  / ____ \ |____| |____ 
+     \/  \/   \____/|_|  \_\_|\_\_____/|_| /_/    \_\_____|______|
+*/
 ipcMain.on(PreloadChannels.workspaceCreate, async () => {
     workspaceCreate()
 })
@@ -129,10 +149,13 @@ ipcMain.handle(PreloadChannels.workspaceOpen, async (event) => {
     return await workspaceOpen(browserWindow)
 })
 
-ipcMain.handle(PreloadChannels.workspaceLoad, async (event) => {
+ipcMain.handle(PreloadChannels.workspaceLoad, async () => {
     return await workspaceLoad()
 })
 
 ipcMain.on(PreloadChannels.workspaceSave, async (event, args) => {
     workspaceSave(args)
 })
+
+
+// while adding new section add https://patorjk.com/software/taag/#p=display&f=Big&t=WORKSPACE

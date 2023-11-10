@@ -1,10 +1,15 @@
 import { cv } from "opencv-wasm"
 
-import { Operation } from "../../../data/operation.interface"
+import {
+    Node,
+    NodeBaseFunctionParameters,
+    NodeParameterTypesEnum,
+    NodeTypesEnum,
+} from "../../../data/node.interface"
 import { loadImg, saveImg } from "../../utils/img.util"
 
-const threshold = async (filePath: string, args: ThresholdArgs) => {
-    const mat = await loadImg(filePath)
+const threshold = async (args: ThresholdArgs) => {
+    const mat = await loadImg(args.inputFilePath[0])
 
     switch (args.type) {
         case 0:
@@ -60,9 +65,7 @@ const threshold = async (filePath: string, args: ThresholdArgs) => {
             break
     }
 
-    const savePath =
-        "C:\\Users\\filip\\Desktop\\perihelion_workflow\\img_out.jpg"
-    saveImg(mat, savePath)
+    saveImg(mat, args.outputFilePath[0])
 }
 
 interface ThresholdTypes {
@@ -74,30 +77,35 @@ interface ThresholdTypes {
     TRIANGLE: 5
 }
 
-interface ThresholdArgs {
+interface ThresholdArgs extends NodeBaseFunctionParameters {
     threshold: number
     maxVal: number
     type: ThresholdTypes[keyof ThresholdTypes]
 }
 
-const filter: Operation<ThresholdArgs> = {
-    init: (filePath: string, args: ThresholdArgs) => threshold(filePath, args),
+const node: Node<ThresholdArgs> = {
+    init: (args: ThresholdArgs) => threshold(args),
     label: "Threshold",
     name: "threshold",
-    type: "filter",
+    type: NodeTypesEnum.FILTER,
     subtype: "threshold",
     description: "Applies threshold to image",
     parameters: [
         {
             label: "Input",
-            type: "input",
+            type: NodeParameterTypesEnum.INPUT,
             name: "input",
             description: "input",
-            default: 0,
+        },
+        {
+            label: "Output",
+            type: NodeParameterTypesEnum.OUTPUT,
+            name: "output",
+            description: "Output",
         },
         {
             label: "Threshold",
-            type: "number",
+            type: NodeParameterTypesEnum.NUMBER,
             name: "threshold",
             description: "Threshold",
             default: 0,
@@ -106,7 +114,7 @@ const filter: Operation<ThresholdArgs> = {
         },
         {
             label: "Max Value",
-            type: "number",
+            type: NodeParameterTypesEnum.NUMBER,
             name: "max-value",
             description: "Max Value",
             default: 255,
@@ -116,7 +124,7 @@ const filter: Operation<ThresholdArgs> = {
         {
             label: "Type",
             name: "type",
-            type: "enum",
+            type: NodeParameterTypesEnum.ENUM,
             description: "Type",
             default: 0,
             options: [
@@ -128,14 +136,7 @@ const filter: Operation<ThresholdArgs> = {
                 { name: "triangle", value: 5, label: "Triangle" },
             ],
         },
-        {
-            label: "Output",
-            type: "output",
-            name: "output",
-            description: "Output",
-            default: 0,
-        },
     ],
 }
 
-module.exports = filter
+module.exports = node

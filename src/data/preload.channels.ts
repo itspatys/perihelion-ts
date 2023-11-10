@@ -7,4 +7,5 @@ export enum PreloadChannels {
 
     nodesLoad = "nodesLoad",
     nodesHandleLoad = "nodesHandleLoad",
+    nodesProcess = "nodesProcess",
 }

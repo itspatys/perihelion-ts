@@ -1,7 +1,9 @@
-import { Node as ReactFlowNode } from "@reactflow/core"
-import { Edge } from "reactflow"
+import { Node as ReactFlowNode } from "@reactflow/core";
+import { Edge } from "reactflow";
 
-import { OperationParameterOptions } from "./operation.interface"
+
+
+import { NodeParameterOptions } from "./node.interface"
 
 export enum NodeStatus {
     PENDING = "PENDING",
@@ -14,7 +16,7 @@ export interface NodeData {
     status: NodeStatus
     operation?: {
         name: string
-        parameters?: OperationParameterOptions[]
+        parameters?: NodeParameterOptions[]
     }
 }
 

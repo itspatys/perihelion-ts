@@ -1,20 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { contextBridge, ipcRenderer } from "electron"
+import { contextBridge, ipcRenderer } from "electron";
 
-import { ConfigurationFile } from "../data/configuration-file.interface"
+
+
+import { ConfigurationFile } from "../data/configuration-file.interface";
 import { PreloadChannels } from "../data/preload.channels"
+import { NodeProcessArgs } from "../main/nodes/node.process"
 
 const api = {
     // handleLoadNodes: (callback: any) =>
     //     ipcRenderer.on(PreloadChannels.nodesHandleLoad, callback),
 
-    operations: {
+    nodes: {
         /**
          *
-         * @returns JSON string of available operations
+         * @returns JSON string of available nodes
          */
-        load: (): Promise<string> =>
+        load: async (): Promise<string> =>
             ipcRenderer.invoke(PreloadChannels.nodesLoad),
+        /**
+         *
+         * @returns Promise<boolean> whether the process was successful
+         */
+        process: async (args: NodeProcessArgs): Promise<boolean> =>
+            ipcRenderer.invoke(PreloadChannels.nodesProcess, args),
     },
 
     workspace: {

@@ -52,7 +52,15 @@ const SidePanel = () => {
                         ([type, operations]) => (
                             <AccordionItem
                                 startContent={
-                                    type === "filter" ? "Filters" : "type"
+                                    type === "filter"
+                                        ? "Filters"
+                                        : type === "math"
+                                        ? "Arithmetic"
+                                        : type === "transformation"
+                                        ? "Image transformation"
+                                        : type === "input-output"
+                                        ? "Input / Output"
+                                        : type
                                 }
                                 aria-label={type}
                                 key={type}
@@ -105,19 +113,33 @@ const SidePanel = () => {
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        window.api.workspace.save(workflow)
+                        window.api.nodes.process({
+                            id: "test-1",
+                            inputIds: ["test"],
+                            params: {
+                                sigmaX: 50,
+                                sigmaY: 50,
+                                kernelY: 1,
+                                kernelX: 1,
+                            },
+                            name: "gaussian",
+                        })
                     }}
                 >
-                    TEST BUTTON(nie dotykać)
+                    Process gaussian node
                 </Button>
                 <Button
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        // window.api.loadNodes()
+                        window.api.nodes.process({
+                            id: "fiutek",
+                            params: {},
+                            name: "input",
+                        })
                     }}
                 >
-                    TEST BUTTON(nie dotykać)
+                    Input node
                 </Button>
                 <Button
                     className="w-full mb-2"

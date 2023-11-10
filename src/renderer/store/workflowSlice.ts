@@ -6,7 +6,7 @@ import {
     ConfigurationFile,
     NodeStatus,
 } from "../../data/configuration-file.interface"
-import { OperationParameterOptions } from "../../data/operation.interface"
+import { NodeParameterOptions as OperationParameterOptions } from "../../data/node.interface"
 
 const isNodePositionChange = (
     change: NodeChange,
