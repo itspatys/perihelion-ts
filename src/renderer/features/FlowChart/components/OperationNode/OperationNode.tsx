@@ -1,4 +1,5 @@
 import {
+    Button,
     Card,
     CardBody,
     CardFooter,
@@ -8,7 +9,9 @@ import {
     Select,
     SelectItem,
     Slider,
+    Tooltip,
 } from "@nextui-org/react"
+import { Xmark } from "@styled-icons/fa-solid/Xmark"
 import clsx from "clsx"
 import { useCallback, useEffect, useState } from "react"
 import { Handle, Position } from "reactflow"
@@ -19,7 +22,10 @@ import {
 } from "../../../../../data/configuration-file.interface"
 import { NodeParameterOptions as OperationParameterOptions } from "../../../../../data/node.interface"
 import { useDispatch, useSelector } from "../../../../store/store"
-import { updateNodeParameter } from "../../../../store/workflowSlice"
+import {
+    deleteNode,
+    updateNodeParameter,
+} from "../../../../store/workflowSlice"
 
 const OperationNode = (nodeProps: Node) => {
     const operation = useSelector((state) =>
@@ -38,12 +44,36 @@ const OperationNode = (nodeProps: Node) => {
         <Card className="w-[calc(32px*8)]" key={nodeProps.id}>
             <CardHeader
                 className={clsx(
-                    "h-[32px]",
+                    "h-[32px] py-0 ",
                     nodeProps.data.status === NodeStatus.PENDING &&
                         "bg-warning text-background",
                 )}
             >
-                {operation.label}
+                <div className="w-full h-full grid grid-cols-[1fr_auto] items-center content-center">
+                    <div>
+                        <Tooltip content={nodeProps.id}>
+                            {/* 
+                            //@ts-ignore */}
+                            <Button variant="flat" color="foreground">
+                                {operation.label}
+                            </Button>
+                        </Tooltip>
+                    </div>
+                    <div className="h-full">
+                        <Button
+                            isIconOnly
+                            aria-label="delete"
+                            size="sm"
+                            className="p-0 m-0 text-background h-full"
+                            variant="light"
+                            onClick={() => {
+                                dispatch(deleteNode(nodeProps.id))
+                            }}
+                        >
+                            <Xmark size={24} />
+                        </Button>
+                    </div>
+                </div>
             </CardHeader>
             <Divider />
             <CardBody className="overflow-x-hidden">

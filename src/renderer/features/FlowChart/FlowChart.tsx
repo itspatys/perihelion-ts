@@ -2,14 +2,14 @@ import ReactFlow, {
     Background,
     BackgroundVariant,
     Connection,
-    EdgeChange,
+    EdgeMouseHandler,
     NodeChange,
     Viewport,
 } from "reactflow"
 
 import { useDispatch, useSelector } from "../../store/store"
 import { setViewport } from "../../store/viewportSlice"
-import { addEdge, setNode } from "../../store/workflowSlice"
+import { addEdge, deleteEdge, setNode } from "../../store/workflowSlice"
 import OperationNode from "./components/OperationNode"
 import StartNode from "./components/StartNode"
 
@@ -37,6 +37,10 @@ const FlowChart = () => {
         dispatch(setViewport(data))
     }
 
+    const onEdgeDoubleClick: EdgeMouseHandler = (_, edge) => {
+        dispatch(deleteEdge(edge.id))
+    }
+
     return (
         <section className="flex h-full w-full">
             <ReactFlow
@@ -50,6 +54,7 @@ const FlowChart = () => {
                 snapGrid={[32, 32]}
                 edgeUpdaterRadius={20}
                 proOptions={{ hideAttribution: true }}
+                onEdgeDoubleClick={onEdgeDoubleClick}
             >
                 <Background variant={BackgroundVariant.Dots} gap={32} />
                 {/* <Controls position="bottom-right" showFitView={false} /> */}

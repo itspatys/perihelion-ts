@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice, original } from "@reduxjs/toolkit"
 import { NodeChange } from "reactflow"
 import type { Connection, EdgeChange, NodePositionChange } from "reactflow"
+import { v4 } from "uuid"
 
 import {
     ConfigurationFile,
@@ -54,6 +55,17 @@ const workflowSlice = createSlice({
                 })
             }
         },
+        deleteNode: (state, action: PayloadAction<string>) => {
+            state.nodes = state.nodes.filter(
+                (node) => node.id !== action.payload,
+            )
+            state.edges = state.edges.filter(
+                (edge) => edge.target !== action.payload,
+            )
+            state.edges = state.edges.filter(
+                (edge) => edge.source !== action.payload,
+            )
+        },
         updateNodeParameter: (
             state,
             action: PayloadAction<{
@@ -75,12 +87,17 @@ const workflowSlice = createSlice({
         },
         addEdge: (state, action: PayloadAction<Connection>) => {
             state.edges.push({
-                id: Date.now().toString(),
+                id: v4(),
                 source: action.payload.source,
                 target: action.payload.target,
                 sourceHandle: action.payload.sourceHandle,
                 targetHandle: action.payload.targetHandle,
             })
+        },
+        deleteEdge: (state, action: PayloadAction<string>) => {
+            state.edges = state.edges.filter(
+                (edge) => edge.id !== action.payload,
+            )
         },
         clearWorkflow: (state) => {
             state = initialState
@@ -91,11 +108,15 @@ const workflowSlice = createSlice({
 export const {
     setWorkflow,
     clearWorkflow,
+
     setEdges,
+    addEdge,
+    deleteEdge,
+
     setNodes,
     setNode,
     addNode,
-    addEdge,
     updateNodeParameter,
+    deleteNode,
 } = workflowSlice.actions
 export default workflowSlice.reducer

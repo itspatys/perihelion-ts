@@ -16,6 +16,7 @@ import { Node, NodeStatus } from "../../../data/configuration-file.interface"
 import { setApp, setWorkspace } from "../../store/appSlice"
 import { useDispatch, useSelector } from "../../store/store"
 import { addNode, clearWorkflow } from "../../store/workflowSlice"
+import { sortNodes } from "../FlowChart/utils/sortNodes"
 
 const SidePanel = () => {
     const workspace = useSelector((state) => state.app.workspace)
@@ -144,7 +145,9 @@ const SidePanel = () => {
                 <Button
                     className="w-full mb-2"
                     color="primary"
-                    onClick={() => {}}
+                    onClick={() => {
+                        console.log(sortNodes(workflow))
+                    }}
                 >
                     Start workflow
                 </Button>

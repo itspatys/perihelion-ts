@@ -26,6 +26,12 @@ const node: Node<InputArgs> = {
     description: "Input",
     parameters: [
         {
+            label: "Previous node",
+            type: NodeParameterTypesEnum.INPUT,
+            name: "previous",
+            description: "previous",
+        },
+        {
             label: "Output",
             type: NodeParameterTypesEnum.OUTPUT,
             name: "output",
