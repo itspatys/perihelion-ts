@@ -20,7 +20,10 @@ import {
     Node,
     NodeStatus,
 } from "../../../../../data/configuration-file.interface"
-import { NodeParameterOptions as OperationParameterOptions } from "../../../../../data/node.interface"
+import {
+    NodeTypesEnum,
+    NodeParameterOptions as OperationParameterOptions,
+} from "../../../../../data/node.interface"
 import { useDispatch, useSelector } from "../../../../store/store"
 import {
     deleteNode,
@@ -196,6 +199,13 @@ const OperationNode = (nodeProps: Node) => {
                           ) : null
                       })
                     : null}
+                {operation.name === "input" ? (
+                    <div className="h-[calc(32px*2)] mt-2">
+                        <Button size="lg" variant="bordered" className="w-full">
+                            Load image from file
+                        </Button>
+                    </div>
+                ) : null}
             </CardBody>
             <Divider />
             <CardFooter className="h-[32px]">
