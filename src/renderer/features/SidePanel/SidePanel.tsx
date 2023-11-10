@@ -52,7 +52,15 @@ const SidePanel = () => {
                         ([type, operations]) => (
                             <AccordionItem
                                 startContent={
-                                    type === "filter" ? "Filters" : "type"
+                                    type === "filter"
+                                        ? "Filters"
+                                        : type === "math"
+                                        ? "Arithmetic"
+                                        : type === "transformation"
+                                        ? "Image transformation"
+                                        : type === "input-output"
+                                        ? "Input / Output"
+                                        : type
                                 }
                                 aria-label={type}
                                 key={type}
@@ -105,7 +113,17 @@ const SidePanel = () => {
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        window.api.nodes.process({id: "test-1", inputIds: ["test"], params: {sigmaX: 1, sigmaY: 1, kernelY: 1, kernelX: 1}, name: "gaussian"})
+                        window.api.nodes.process({
+                            id: "test-1",
+                            inputIds: ["test"],
+                            params: {
+                                sigmaX: 50,
+                                sigmaY: 50,
+                                kernelY: 1,
+                                kernelX: 1,
+                            },
+                            name: "gaussian",
+                        })
                     }}
                 >
                     Process gaussian node
@@ -114,7 +132,11 @@ const SidePanel = () => {
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        window.api.nodes.process({id: "fiutek", params: {}, name: "input"})
+                        window.api.nodes.process({
+                            id: "fiutek",
+                            params: {},
+                            name: "input",
+                        })
                     }}
                 >
                     Input node

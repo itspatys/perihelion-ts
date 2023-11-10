@@ -101,4 +101,5 @@ export interface NodeIOParameter<
     name: string
     type: T
     description: string
+    default?: string
 }

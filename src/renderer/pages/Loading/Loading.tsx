@@ -19,7 +19,7 @@ const Loading = () => {
 
     const load = useCallback(async () => {
         const nodesJSON = await window.api.nodes.load()
-        const workflowJSON = await window.api.nodes.load()
+        const workflowJSON = await window.api.workspace.load()
 
         dispatch(setOperations(nodesJSON))
         dispatch(setWorkflow(workflowJSON))

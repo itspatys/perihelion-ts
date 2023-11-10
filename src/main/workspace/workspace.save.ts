@@ -7,7 +7,7 @@ import { StoreValues, store } from "../store"
 export const workspaceSave = (args: ConfigurationFile) => {
     //const configFilePath = store.get(StoreValues.workspacePath)
     args.workspacePath = store.get(StoreValues.workspacePath)
-    console.log("workspaceSave", args)
+    // console.log("workspaceSave", args)
 
     fs.writeFile(
         args.workspacePath + CONFIG_FILE_NAME,
@@ -17,7 +17,7 @@ export const workspaceSave = (args: ConfigurationFile) => {
                 console.error(err)
                 return
             }
-            console.log("Workspace saved!")
+            // console.log("Workspace saved!")
         },
     )
 }
