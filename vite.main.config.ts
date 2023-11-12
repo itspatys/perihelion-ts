@@ -47,6 +47,10 @@ export default defineConfig({
                     src: "node_modules/electron",
                     dest: "node_modules",
                 },
+                {
+                    src: "node_modules/typescript",
+                    dest: "node_modules",
+                }
             ],
         }),
         commonjs({
@@ -60,6 +64,6 @@ export default defineConfig({
     ],
 
     optimizeDeps: {
-        exclude: ["opencv-wasm"],
+        exclude: ["opencv-wasm", "fsevents"],
     },
 })

@@ -5,6 +5,7 @@ export async function nodesLoader() {
     let nodesJSON = {}
     try {
         const files = await fs.readdir(path.join(process.cwd(), ".vite/build"))
+        console.log(files)
         const filters = []
         for (const file of files) {
             if (file.endsWith(".node.js")) {

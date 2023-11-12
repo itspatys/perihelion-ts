@@ -133,10 +133,19 @@ const SidePanel = () => {
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        window.api.nodes.loadImage('hihi')
+                        window.api.test()
                     }}
                 >
-                    Load Image
+                    Transpile
+                </Button>
+                <Button
+                    className="w-full mb-2"
+                    color="primary"
+                    onClick={() => {
+                        console.log(window.api.nodes.load())
+                    }}
+                >
+                    Load nodes
                 </Button>
                 <Button
                     className="w-full mb-2"

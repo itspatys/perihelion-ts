@@ -44,6 +44,8 @@ const api = {
         save: (args: ConfigurationFile) =>
             ipcRenderer.send(PreloadChannels.workspaceSave, args),
     },
+
+    test: () => ipcRenderer.send('test'),
 } as const
 
 contextBridge.exposeInMainWorld("api", api)

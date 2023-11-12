@@ -3,8 +3,6 @@ import { config } from "dotenv";
 import { BrowserWindow, app, ipcMain, screen, session } from "electron";
 import path from "path";
 
-
-
 import { PreloadChannels } from "../data/preload.channels";
 import { NodeProcessArgs, nodeProcess } from "./nodes/node.process";
 import { nodesLoader } from "./nodes/nodes.loader";
@@ -171,3 +169,25 @@ ipcMain.on(PreloadChannels.workspaceSave, async (event, args) => {
 
 
 // while adding new section add https://patorjk.com/software/taag/#p=display&f=Big&t=WORKSPACE
+
+import esbuild from 'esbuild';
+import fs from 'fs/promises'
+
+
+ipcMain.on('test', async ()=>{
+    
+    const res = esbuild.transformSync(await fs.readFile(path.join(process.cwd(),'user.filter.node.ts'), 'utf8'), {loader: 'ts', format: 'cjs'})
+    await fs.writeFile('user.filter.node.js', res.code)
+    
+    console.log(res)
+    
+    await esbuild.build({
+        entryPoints: ['user.filter.node.js'],
+        bundle: false,
+        platform: 'node',
+        tsconfig: './tsconfig.json',
+        format: 'cjs',
+        minify: true,
+        outfile: './.vite/build/user.filter.node.js'
+    });
+})

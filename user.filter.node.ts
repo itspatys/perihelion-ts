@@ -1,7 +1,6 @@
 import { cv } from "opencv-wasm";
-import { Node, NodeBaseFunctionParameters, NodeParameterTypesEnum, NodeTypesEnum } from "../../../data/node.interface";
-import { loadImg, saveImg } from "../../utils/img.util";
-
+import { Node, NodeBaseFunctionParameters, NodeParameterTypesEnum, NodeTypesEnum } from "./src/data/node.interface";
+import { loadImg, saveImg } from "./src/main/utils/img.util"
 
 const gaussian = async (args: GaussianArgs) => {
     const mat = await loadImg(args.inputFilePath[0])
@@ -27,11 +26,11 @@ interface GaussianArgs extends NodeBaseFunctionParameters {
 
 const node: Node<GaussianArgs> = {
     init: (args: GaussianArgs) => gaussian(args),
-    name: "gaussian",
-    label: "Gaussian",
+    name: "TEST",
+    label: "TEST",
     type: NodeTypesEnum.FILTER,
-    subtype: "gaussian",
-    description: "Applies gaussian blur to image",
+    subtype: "TEST",
+    description: "TEST",
     parameters: [
         {
             label: "Input",
