@@ -9,4 +9,5 @@ export enum PreloadChannels {
     nodesLoadImage = "nodesLoadImage",
     nodesHandleLoad = "nodesHandleLoad",
     nodesProcess = "nodesProcess",
+    getImage = "getImage",
 }

@@ -6,27 +6,30 @@ import {
     CardHeader,
     Chip,
     Divider,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
+    Image,
     Select,
     SelectItem,
     Slider,
     Tooltip,
 } from "@nextui-org/react"
-import { Xmark } from "@styled-icons/fa-solid/Xmark"
+import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical"
 import clsx from "clsx"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Handle, Position } from "reactflow"
 
 import {
     Node,
     NodeStatus,
 } from "../../../../../data/configuration-file.interface"
-import {
-    NodeTypesEnum,
-    NodeParameterOptions as OperationParameterOptions,
-} from "../../../../../data/node.interface"
+import { NodeParameterOptions as OperationParameterOptions } from "../../../../../data/node.interface"
 import { useDispatch, useSelector } from "../../../../store/store"
 import {
     deleteNode,
+    setFile,
     updateNodeParameter,
 } from "../../../../store/workflowSlice"
 
@@ -35,6 +38,7 @@ const OperationNode = (nodeProps: Node) => {
         state.operations.find((o) => o.name === nodeProps.data.operation.name),
     )
     const dispatch = useDispatch()
+    const [mime, setMime] = useState("")
 
     const setParameterValue = useCallback(
         (id: string, parameter: Partial<OperationParameterOptions>) => {
@@ -43,11 +47,27 @@ const OperationNode = (nodeProps: Node) => {
         [],
     )
 
+    useEffect(() => {
+        setMimeAsync()
+    }, [nodeProps.data.file])
+
+    useEffect(() => {
+        setMimeAsync()
+    }, [])
+
+    const setMimeAsync = async () => {
+        if (!nodeProps.data.file) {
+            return ""
+        }
+        const mime = await window.api.nodes.getImage(nodeProps.data.file)
+        setMime(mime)
+    }
+
     return (
         <Card className="w-[calc(32px*8)]" key={nodeProps.id}>
             <CardHeader
                 className={clsx(
-                    "h-[32px] py-0 ",
+                    "h-[32px] py-0 mr-0 pr-0",
                     nodeProps.data.status === NodeStatus.PENDING &&
                         "bg-warning text-background",
                 )}
@@ -63,7 +83,52 @@ const OperationNode = (nodeProps: Node) => {
                         </Tooltip>
                     </div>
                     <div className="h-full">
-                        <Button
+                        <Dropdown>
+                            <DropdownTrigger>
+                                <Button
+                                    size="sm"
+                                    className="p-0 m-0 text-background h-full"
+                                    variant="light"
+                                >
+                                    <ThreeDotsVertical className="h-6 w-6" />
+                                </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                                onAction={(key) => {
+                                    if (key === "delete-node") {
+                                        dispatch(deleteNode(nodeProps.id))
+                                        return
+                                    }
+
+                                    if (key === "delete-image") {
+                                        dispatch(
+                                            setFile({
+                                                id: nodeProps.id,
+                                                file: undefined,
+                                            }),
+                                        )
+                                    }
+                                }}
+                            >
+                                <DropdownItem
+                                    key="delete-node"
+                                    color="danger"
+                                    className="text-danger"
+                                >
+                                    Delete node
+                                </DropdownItem>
+                                {nodeProps.data.operation.name === "input" ? (
+                                    <DropdownItem
+                                        key="delete-image"
+                                        color="danger"
+                                        className="text-danger"
+                                    >
+                                        Delete image
+                                    </DropdownItem>
+                                ) : null}
+                            </DropdownMenu>
+                        </Dropdown>
+                        {/* <Button
                             isIconOnly
                             aria-label="delete"
                             size="sm"
@@ -74,7 +139,7 @@ const OperationNode = (nodeProps: Node) => {
                             }}
                         >
                             <Xmark size={24} />
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
             </CardHeader>
@@ -199,13 +264,42 @@ const OperationNode = (nodeProps: Node) => {
                           ) : null
                       })
                     : null}
-                {operation.name === "input" ? (
-                    <div className="h-[calc(32px*2)] mt-2">
-                        <Button size="lg" variant="bordered" className="w-full">
-                            Load image from file
-                        </Button>
-                    </div>
-                ) : null}
+                {operation.name === "input"
+                    ? (() => {
+                          return (
+                              <div className="h-[calc(32px*4)] mt-2 flex justify-center">
+                                  {!nodeProps.data.file ? (
+                                      <Button
+                                          size="lg"
+                                          variant="bordered"
+                                          className="w-full"
+                                          onClick={async () => {
+                                              const file =
+                                                  await window.api.nodes.loadImage(
+                                                      nodeProps.id,
+                                                  )
+                                              dispatch(
+                                                  setFile({
+                                                      id: nodeProps.id,
+                                                      file: file,
+                                                  }),
+                                              )
+                                          }}
+                                      >
+                                          Load image from file
+                                      </Button>
+                                  ) : (
+                                      <Image
+                                          src={mime}
+                                          height={30 * 4}
+                                          className="h-[calc(32px*4)]"
+                                          isZoomed
+                                      />
+                                  )}
+                              </div>
+                          )
+                      })()
+                    : null}
             </CardBody>
             <Divider />
             <CardFooter className="h-[32px]">

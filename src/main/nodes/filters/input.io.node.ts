@@ -8,7 +8,7 @@ import {
 /* eslint-disable @typescript-eslint/no-empty-function */
 const input = async () => {}
 
-type InputArgs = NodeBaseFunctionParameters;
+type InputArgs = NodeBaseFunctionParameters
 
 const node: Node<InputArgs> = {
     init: () => input(),

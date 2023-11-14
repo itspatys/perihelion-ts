@@ -25,6 +25,9 @@ const FlowChart = () => {
 
     const onNodesChange = (changes: NodeChange[]) => {
         changes.forEach((change) => {
+            if (change.type === "dimensions") {
+                return
+            }
             dispatch(setNode(change))
         })
     }

@@ -1,21 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { config } from "dotenv";
-import { BrowserWindow, app, ipcMain, screen, session } from "electron";
-import path from "path";
+import { config } from "dotenv"
+import { BrowserWindow, app, ipcMain, screen, session } from "electron"
+import Jimp from "jimp"
+import path from "path"
 
-
-
-import { PreloadChannels } from "../data/preload.channels";
-import { NodeProcessArgs, nodeProcess } from "./nodes/node.process";
-import { nodesLoader } from "./nodes/nodes.loader";
-import { workspaceCreate } from "./workspace/workspace.create";
-import { workspaceLoad } from "./workspace/workspace.load";
-import { workspaceOpen } from "./workspace/workspace.open";
-import { workspaceSave } from "./workspace/workspace.save";
-import { showOpenFileDialog } from "./utils/file";
-import { loadImg, saveImg } from "./utils/img.util";
-import { StoreValues, store } from "./store";
-
+import { PreloadChannels } from "../data/preload.channels"
+import { NodeProcessArgs, nodeProcess } from "./nodes/node.process"
+import { nodesLoader } from "./nodes/nodes.loader"
+import { StoreValues, store } from "./store"
+import { showOpenFileDialog } from "./utils/file"
+import { loadImg, saveImg } from "./utils/img.util"
+import { workspaceCreate } from "./workspace/workspace.create"
+import { workspaceLoad } from "./workspace/workspace.load"
+import { workspaceOpen } from "./workspace/workspace.open"
+import { workspaceSave } from "./workspace/workspace.save"
 
 config()
 if (require("electron-squirrel-startup")) {
@@ -137,10 +135,24 @@ ipcMain.handle(
 ipcMain.handle(PreloadChannels.nodesLoadImage, async (event, inputName) => {
     const browserWindow = BrowserWindow.fromWebContents(event.sender)
     if (!browserWindow) return
-    const mat = await loadImg(await showOpenFileDialog(browserWindow))
+    const img = await showOpenFileDialog(browserWindow)
+    if (!img) {
+        return
+    }
+    const mat = await loadImg(img)
     const workspacePath = store.get(StoreValues.workspacePath)
-    const imgPath = path.join(workspacePath, inputName+'.png')
+    const fileName = inputName + ".png"
+    const imgPath = path.join(workspacePath, fileName)
     saveImg(mat, imgPath)
+    return fileName
+})
+
+ipcMain.handle(PreloadChannels.getImage, async (_, file: string) => {
+    const workspacePath = store.get(StoreValues.workspacePath)
+    const imgPath = path.join(workspacePath, file)
+    const img = await Jimp.read(imgPath)
+    const mime = await img.getBase64Async(Jimp.AUTO)
+    return mime
 })
 
 /*
@@ -168,6 +180,5 @@ ipcMain.handle(PreloadChannels.workspaceLoad, async () => {
 ipcMain.on(PreloadChannels.workspaceSave, async (event, args) => {
     workspaceSave(args)
 })
-
 
 // while adding new section add https://patorjk.com/software/taag/#p=display&f=Big&t=WORKSPACE

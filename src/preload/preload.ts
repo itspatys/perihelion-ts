@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer } from "electron"
 
-
-
-import { ConfigurationFile } from "../data/configuration-file.interface";
+import { ConfigurationFile } from "../data/configuration-file.interface"
 import { PreloadChannels } from "../data/preload.channels"
 import { NodeProcessArgs } from "../main/nodes/node.process"
 
@@ -20,8 +18,9 @@ const api = {
             ipcRenderer.invoke(PreloadChannels.nodesLoad),
         /**
          * Invokes file dialog to select image
+         * @returns file name
          */
-        loadImage: async (inputName: string) =>
+        loadImage: async (inputName: string): Promise<string> =>
             ipcRenderer.invoke(PreloadChannels.nodesLoadImage, inputName),
         /**
          *
@@ -29,6 +28,14 @@ const api = {
          */
         process: async (args: NodeProcessArgs): Promise<boolean> =>
             ipcRenderer.invoke(PreloadChannels.nodesProcess, args),
+        /**
+         *
+         * @param file file name
+         * @returns base64 encoded image
+         */
+        getImage: async (file: string): Promise<string> => {
+            return ipcRenderer.invoke(PreloadChannels.getImage, file)
+        },
     },
 
     workspace: {

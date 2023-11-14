@@ -7,6 +7,7 @@ import {
     addNode,
     deleteEdge,
     deleteNode,
+    setFile,
     setNode,
     updateNodeParameter,
 } from "./workflowSlice"
@@ -25,6 +26,7 @@ startAppListening({
         setNode,
         deleteNode,
         deleteEdge,
+        setFile,
     ),
     effect: (_, listenerApi) => {
         window.api.workspace.save(listenerApi.getState().workflow)

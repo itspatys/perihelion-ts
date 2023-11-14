@@ -1,7 +1,5 @@
-import { Node as ReactFlowNode } from "@reactflow/core";
-import { Edge } from "reactflow";
-
-
+import { Node as ReactFlowNode } from "@reactflow/core"
+import { Edge } from "reactflow"
 
 import { NodeParameterOptions } from "./node.interface"
 
@@ -14,6 +12,7 @@ export enum NodeStatus {
 
 export interface NodeData {
     status: NodeStatus
+    file?: string
     operation?: {
         name: string
         parameters?: NodeParameterOptions[]

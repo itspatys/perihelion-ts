@@ -40,6 +40,14 @@ const workflowSlice = createSlice({
         ) => {
             state.nodes.push(action.payload)
         },
+        setFile: (
+            state,
+            action: PayloadAction<{ id: string; file: string | undefined }>,
+        ) => {
+            state.nodes.find(
+                (node) => node.id === action.payload.id,
+            ).data.file = action.payload.file
+        },
         setNode: (state, action: PayloadAction<NodeChange>) => {
             const change = action.payload
 
@@ -151,5 +159,6 @@ export const {
     addNode,
     updateNodeParameter,
     deleteNode,
+    setFile,
 } = workflowSlice.actions
 export default workflowSlice.reducer
