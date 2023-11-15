@@ -1,7 +1,7 @@
 import {
     ConfigurationFile,
     Node,
-} from "../../../../data/configuration-file.interface"
+} from "../../../../../data/configuration-file.interface"
 
 const sortNodes = (workflow: ConfigurationFile): Node[] => {
     const visited: { [key: string]: boolean } = {}

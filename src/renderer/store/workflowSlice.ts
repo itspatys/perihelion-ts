@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice, original } from "@reduxjs/toolkit"
 import { NodeChange } from "reactflow"
-import type { Connection, EdgeChange, NodePositionChange } from "reactflow"
+import type { Connection, NodePositionChange } from "reactflow"
 import { v4 } from "uuid"
 
 import {
@@ -44,9 +44,26 @@ const workflowSlice = createSlice({
             state,
             action: PayloadAction<{ id: string; file: string | undefined }>,
         ) => {
+            const node = state.nodes.find(
+                (node) => node.id === action.payload.id,
+            )
+            node.data.file = action.payload.file
+
+            if (action.payload.file) {
+                node.data.status = NodeStatus.SUCCESS
+            }
+
+            if (!action.payload.file) {
+                node.data.status = NodeStatus.PENDING
+            }
+        },
+        setStatus: (
+            state,
+            action: PayloadAction<{ id: string; status: NodeStatus }>,
+        ) => {
             state.nodes.find(
                 (node) => node.id === action.payload.id,
-            ).data.file = action.payload.file
+            ).data.status = action.payload.status
         },
         setNode: (state, action: PayloadAction<NodeChange>) => {
             const change = action.payload
@@ -160,5 +177,6 @@ export const {
     updateNodeParameter,
     deleteNode,
     setFile,
+    setStatus,
 } = workflowSlice.actions
 export default workflowSlice.reducer

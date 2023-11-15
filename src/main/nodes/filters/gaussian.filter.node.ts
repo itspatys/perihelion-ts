@@ -1,10 +1,12 @@
-import { cv } from "opencv-wasm";
+import { cv } from "opencv-wasm"
 
-
-
-import { Node, NodeBaseFunctionParameters, NodeParameterTypesEnum, NodeTypesEnum } from "../../../data/node.interface";
-import { loadImg, saveImg } from "../../utils/img.util";
-
+import {
+    Node,
+    NodeBaseFunctionParameters,
+    NodeParameterTypesEnum,
+    NodeTypesEnum,
+} from "../../../data/node.interface"
+import { loadImg, saveImg } from "../../utils/img.util"
 
 const gaussian = async (args: GaussianArgs) => {
     const mat = await loadImg(args.inputFilePath[0])
@@ -50,7 +52,7 @@ const node: Node<GaussianArgs> = {
         },
         {
             label: "Sigma X",
-            name: "sigma-x",
+            name: "sigmaX",
             type: NodeParameterTypesEnum.NUMBER,
             description: "Sigma X",
             default: 0,
@@ -59,7 +61,7 @@ const node: Node<GaussianArgs> = {
         },
         {
             label: "Sigma Y",
-            name: "sigma-y",
+            name: "sigmaY",
             type: NodeParameterTypesEnum.NUMBER,
             description: "Sigma Y",
             default: 0,
@@ -68,7 +70,7 @@ const node: Node<GaussianArgs> = {
         },
         {
             label: "Kernel X",
-            name: "kernel-x",
+            name: "kernelX",
             type: NodeParameterTypesEnum.NUMBER,
             description: "Kernel X",
             default: 1,
@@ -77,7 +79,7 @@ const node: Node<GaussianArgs> = {
         },
         {
             label: "Kernel Y",
-            name: "kernel-y",
+            name: "kernelY",
             type: NodeParameterTypesEnum.NUMBER,
             description: "Kernel Y",
             default: 1,

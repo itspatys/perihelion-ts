@@ -70,6 +70,11 @@ const OperationNode = (nodeProps: Node) => {
                     "h-[32px] py-0 mr-0 pr-0",
                     nodeProps.data.status === NodeStatus.PENDING &&
                         "bg-warning text-background",
+                    nodeProps.data.status === NodeStatus.SUCCESS &&
+                        "bg-primary",
+                    nodeProps.data.status === NodeStatus.RUNNING &&
+                        "bg-success text-background",
+                    nodeProps.data.status === NodeStatus.FAILED && "bg-danger",
                 )}
             >
                 <div className="w-full h-full grid grid-cols-[1fr_auto] items-center content-center">

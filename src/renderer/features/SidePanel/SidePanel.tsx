@@ -16,12 +16,12 @@ import { Node, NodeStatus } from "../../../data/configuration-file.interface"
 import { setApp, setWorkspace } from "../../store/appSlice"
 import { useDispatch, useSelector } from "../../store/store"
 import { addNode, clearWorkflow } from "../../store/workflowSlice"
-import { sortNodes } from "../FlowChart/utils/sortNodes"
+import StartWorkflow from "./StartWorkflow"
 
 const SidePanel = () => {
     const workspace = useSelector((state) => state.app.workspace)
     const viewport = useSelector((state) => state.viewport)
-    const workflow = useSelector((state) => state.workflow)
+
     const operations = useSelector((state) => state.operations)
     const dispatch = useDispatch()
 
@@ -133,20 +133,12 @@ const SidePanel = () => {
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
-                        window.api.nodes.loadImage('hihi')
+                        window.api.nodes.loadImage("hihi")
                     }}
                 >
                     Load Image
                 </Button>
-                <Button
-                    className="w-full mb-2"
-                    color="primary"
-                    onClick={() => {
-                        console.log(sortNodes(workflow))
-                    }}
-                >
-                    Start workflow
-                </Button>
+                <StartWorkflow />
                 <Button
                     className="w-full"
                     color="default"
