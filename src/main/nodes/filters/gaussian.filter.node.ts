@@ -20,7 +20,7 @@ const gaussian = async (args: GaussianArgs) => {
         cv.BORDER_DEFAULT,
     )
 
-    saveImg(mat, args.outputFilePath[0])
+    return saveImg(mat, args.outputFilePath[0])
 }
 
 interface GaussianArgs extends NodeBaseFunctionParameters {

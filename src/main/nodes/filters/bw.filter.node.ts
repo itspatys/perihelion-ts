@@ -9,7 +9,7 @@ import { loadImg, saveImg } from "../../utils/img.util";
 const bw = async (args: BwArgs) => {
     const mat = await loadImg(args.inputFilePath[0])
     await cv.cvtColor(mat, mat, cv.COLOR_BGR2GRAY)
-    saveImg(mat, args.outputFilePath[0])
+    return saveImg(mat, args.outputFilePath[0])
 }
 
 type BwArgs = NodeBaseFunctionParameters

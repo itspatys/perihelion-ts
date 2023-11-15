@@ -1,4 +1,5 @@
-import { NonEmptyArray } from "../main/utils/utils.interface"
+import { NonEmptyArray } from "../main/utils/utils.interface";
+
 
 /**
  * Enumeration of parameter types for nodes.
@@ -46,7 +47,7 @@ export interface Node<T extends NodeBaseFunctionParameters = object> {
      * @param {T} args - The parameters required for node initialization.
      * @returns {Promise<void>} A Promise resolving when initialization is complete.
      */
-    init: (args: T) => Promise<void>
+    init: (args: T) => Promise<boolean>
     name: string
     label: string
     type: NodeTypesEnum

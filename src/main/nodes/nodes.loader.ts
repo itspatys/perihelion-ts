@@ -14,12 +14,11 @@ export async function nodesLoader() {
                 filters.push(module)
             }
         }
-        console.log(filters)
         fs.writeFile("nodes.json", JSON.stringify(filters))
 
         nodesJSON = filters
     } catch (error) {
-        console.log(error)
+        console.log('Error loading nodes: ', error)
     }
 
     return JSON.stringify(nodesJSON)

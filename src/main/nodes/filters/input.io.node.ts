@@ -1,12 +1,8 @@
-import {
-    Node,
-    NodeBaseFunctionParameters,
-    NodeParameterTypesEnum,
-    NodeTypesEnum,
-} from "../../../data/node.interface"
+import { Node, NodeBaseFunctionParameters, NodeParameterTypesEnum, NodeTypesEnum } from "../../../data/node.interface";
+
 
 /* eslint-disable @typescript-eslint/no-empty-function */
-const input = async () => {}
+const input = async () => true
 
 type InputArgs = NodeBaseFunctionParameters
 

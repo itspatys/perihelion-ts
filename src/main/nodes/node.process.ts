@@ -35,7 +35,7 @@ export const nodeProcess = async (
             )
             console.log(`Initializing <${args.name.toUpperCase()}> node`)
             // we need to pass the browserWindows as we want to show the file dialog on input file
-            module.init(initFunctionParameters, browserWindow)
+            return module.init(initFunctionParameters, browserWindow)
         }
     }
 }

@@ -1,12 +1,10 @@
-import { cv } from "opencv-wasm"
+import { cv } from "opencv-wasm";
 
-import {
-    Node,
-    NodeBaseFunctionParameters,
-    NodeParameterTypesEnum,
-    NodeTypesEnum,
-} from "../../../data/node.interface"
-import { loadImg, saveImg } from "../../utils/img.util"
+
+
+import { Node, NodeBaseFunctionParameters, NodeParameterTypesEnum, NodeTypesEnum } from "../../../data/node.interface";
+import { loadImg, saveImg } from "../../utils/img.util";
+
 
 const threshold = async (args: ThresholdArgs) => {
     const mat = await loadImg(args.inputFilePath[0])
@@ -65,7 +63,7 @@ const threshold = async (args: ThresholdArgs) => {
             break
     }
 
-    saveImg(mat, args.outputFilePath[0])
+    return saveImg(mat, args.outputFilePath[0])
 }
 
 interface ThresholdTypes {

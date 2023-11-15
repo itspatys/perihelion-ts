@@ -1,13 +1,14 @@
-import Jimp from "jimp"
-import { cv } from "opencv-wasm"
+import Jimp from "jimp";
+import { cv } from "opencv-wasm";
+
 
 export const loadImg = async (filePath: string) => {
-    try{
+    try {
         const img = await Jimp.read(filePath)
         const mat = cv.matFromImageData(img.bitmap)
         return mat
     } catch (error) {
-        console.log(error)
+        console.log(`Error loading ${filePath}:`, error)
         throw new Error("Error loading image")
     }
 }
@@ -20,7 +21,7 @@ export const saveImg = (mat: any, filePath: string): boolean => {
             data: Buffer.from(mat.data),
         }).write(filePath)
     } catch (error) {
-        console.log(error)
+        console.log(`Error saving ${filePath}:`, error)
         return false
     }
     return true
