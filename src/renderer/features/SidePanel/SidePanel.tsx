@@ -110,7 +110,7 @@ const SidePanel = () => {
                 </Accordion>
             </div>
             <div className="my-2">
-                <Button
+                {/* <Button
                     className="w-full mb-2"
                     color="primary"
                     onClick={() => {
@@ -137,7 +137,7 @@ const SidePanel = () => {
                     }}
                 >
                     Load Image
-                </Button>
+                </Button> */}
                 <StartWorkflow />
                 <Button
                     className="w-full"

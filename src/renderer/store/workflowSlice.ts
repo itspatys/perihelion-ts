@@ -8,6 +8,7 @@ import {
     NodeStatus,
 } from "../../data/configuration-file.interface"
 import { NodeParameterOptions as OperationParameterOptions } from "../../data/node.interface"
+import { getDependentNodes } from "./utils/getDependentNodes"
 
 const isNodePositionChange = (
     change: NodeChange,
@@ -157,6 +158,8 @@ const workflowSlice = createSlice({
                 (edge) => edge.id !== action.payload,
             )
         },
+        invalidateNode: (_, __: PayloadAction<string>) => {},
+
         clearWorkflow: (state) => {
             state = initialState
         },
@@ -178,5 +181,6 @@ export const {
     deleteNode,
     setFile,
     setStatus,
+    invalidateNode,
 } = workflowSlice.actions
 export default workflowSlice.reducer

@@ -45,24 +45,32 @@ const handleWorkflow = async (
             node.data.operation.parameters.map((p) => [p.name, p.value]),
         )
 
-        const status = await window.api.nodes.process({
-            id: node.id,
-            inputIds: inputIds,
-            params: params,
-            name: node.data.operation.name,
-        })
-
-        if (!status) {
-            toast.error("Error while processing node.", {
-                description: "ID: " + node.id,
+        try {
+            // const status =
+            await window.api.nodes.process({
+                id: node.id,
+                inputIds: inputIds,
+                params: params,
+                name: node.data.operation.name,
+            })
+        } catch (err) {
+            toast.error("Error while processing node", {
+                description: "ID " + node.id + err,
             })
             setStatus({ id: node.id, status: NodeStatus.FAILED })
             return
         }
 
+        // if (!status) {
+        //     toast.error("Error while processing node.", {
+        //         description: "ID: " + node.id,
+        //     })
+        //     setStatus({ id: node.id, status: NodeStatus.FAILED })
+        //     return
+        // }
+
         setStatus({ id: node.id, status: NodeStatus.SUCCESS })
     }
-
     toast.success("Workflow finished")
 }
 

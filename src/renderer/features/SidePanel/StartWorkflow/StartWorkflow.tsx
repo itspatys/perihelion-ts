@@ -25,6 +25,7 @@ const StartWorkflow = () => {
             onClick={() => {
                 handleWorkflow(workflow, toast, setStatusWrapper)
             }}
+            color="primary"
         >
             Start Workflow
         </Button>

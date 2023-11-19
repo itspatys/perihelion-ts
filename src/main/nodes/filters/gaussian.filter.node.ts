@@ -74,8 +74,8 @@ const node: Node<GaussianArgs> = {
             type: NodeParameterTypesEnum.NUMBER,
             description: "Kernel X",
             default: 1,
-            range: [1, 100],
-            step: 1,
+            range: [1, 99],
+            step: 2,
         },
         {
             label: "Kernel Y",
@@ -83,8 +83,8 @@ const node: Node<GaussianArgs> = {
             type: NodeParameterTypesEnum.NUMBER,
             description: "Kernel Y",
             default: 1,
-            range: [1, 100],
-            step: 1,
+            range: [1, 99],
+            step: 2,
         },
     ],
 }

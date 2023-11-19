@@ -29,6 +29,7 @@ import { NodeParameterOptions as OperationParameterOptions } from "../../../../.
 import { useDispatch, useSelector } from "../../../../store/store"
 import {
     deleteNode,
+    invalidateNode,
     setFile,
     updateNodeParameter,
 } from "../../../../store/workflowSlice"
@@ -105,6 +106,11 @@ const OperationNode = (nodeProps: Node) => {
                                         return
                                     }
 
+                                    if (key === "invalidate") {
+                                        dispatch(invalidateNode(nodeProps.id))
+                                        return
+                                    }
+
                                     if (key === "delete-image") {
                                         dispatch(
                                             setFile({
@@ -115,6 +121,11 @@ const OperationNode = (nodeProps: Node) => {
                                     }
                                 }}
                             >
+                                {nodeProps.data.operation.name !== "input" ? (
+                                    <DropdownItem key="invalidate">
+                                        Force node invalidate
+                                    </DropdownItem>
+                                ) : null}
                                 <DropdownItem
                                     key="delete-node"
                                     color="danger"
