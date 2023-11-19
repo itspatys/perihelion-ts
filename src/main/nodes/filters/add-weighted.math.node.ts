@@ -15,7 +15,7 @@ const addWeighted = async (args: AddWeightedArgs) => {
     const mat1 = await loadImg(args.inputFilePath[0])
     const mat2 = await loadImg(args.inputFilePath[1])
     const dst = new cv.Mat()
-    cv.addWeighted(mat1, alpha, mat2, beta, 0.0, dst, -1)
+    cv.addWeighted(mat1, beta, mat2, alpha, 0.0, dst, -1)
     return saveImg(dst, args.outputFilePath[0])
 }
 
