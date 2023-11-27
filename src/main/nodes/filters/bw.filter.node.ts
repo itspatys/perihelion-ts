@@ -1,15 +1,26 @@
-import { cv } from "opencv-wasm";
+import { ColorActionName } from "@jimp/plugin-color"
+import { cv } from "opencv-wasm"
 
-
-
-import { Node, NodeBaseFunctionParameters, NodeParameterTypesEnum, NodeTypesEnum } from "../../../data/node.interface";
-import { loadImg, saveImg } from "../../utils/img.util";
-
+import {
+    Node,
+    NodeBaseFunctionParameters,
+    NodeParameterTypesEnum,
+    NodeTypesEnum,
+} from "../../../data/node.interface"
+import {
+    loadImg,
+    loadImgJimp,
+    saveImg,
+    saveImgJimp,
+} from "../../utils/img.util"
 
 const bw = async (args: BwArgs) => {
-    const mat = await loadImg(args.inputFilePath[0])
-    await cv.cvtColor(mat, mat, cv.COLOR_BGR2GRAY)
-    return saveImg(mat, args.outputFilePath[0])
+    // const mat = await loadImg(args.inputFilePath[0])
+    // await cv.cvtColor(mat, mat, cv.COLOR_BGR2GRAY)
+    // return saveImg(mat, args.outputFilePath[0])
+    const img = await loadImgJimp(args.inputFilePath[0])
+    img.color([{ apply: ColorActionName.GREYSCALE, params: [100] }])
+    return saveImgJimp(img, args.outputFilePath[0])
 }
 
 type BwArgs = NodeBaseFunctionParameters
