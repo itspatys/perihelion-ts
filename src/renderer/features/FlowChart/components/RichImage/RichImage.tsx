@@ -24,7 +24,7 @@ const RichImage = ({ mime }: { mime: string }) => {
                 <ModalContent>
                     <ModalHeader>Image preview</ModalHeader>
                     <ModalBody>
-                        <div className="w-100 flex justify-center">
+                        <div className="w-100 flex justify-center max-h-[80vh] overflow-scroll">
                             <Image src={mime} onClick={onOpen} />
                         </div>
                     </ModalBody>
