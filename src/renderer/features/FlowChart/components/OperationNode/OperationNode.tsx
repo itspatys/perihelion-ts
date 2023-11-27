@@ -33,6 +33,7 @@ import {
     setFile,
     updateNodeParameter,
 } from "../../../../store/workflowSlice"
+import RichImage from "../RichImage"
 
 const OperationNode = (nodeProps: Node) => {
     const operation = useSelector((state) =>
@@ -50,17 +51,27 @@ const OperationNode = (nodeProps: Node) => {
 
     useEffect(() => {
         setMimeAsync()
-    }, [nodeProps.data.file])
+    }, [nodeProps.data.file, nodeProps.data.status])
 
     useEffect(() => {
         setMimeAsync()
     }, [])
 
     const setMimeAsync = async () => {
-        if (!nodeProps.data.file) {
+        if (!["input", "output"].includes(nodeProps.data.operation.name)) {
             return ""
         }
-        const mime = await window.api.nodes.getImage(nodeProps.data.file)
+
+        let mime = ""
+
+        switch (nodeProps.data.operation.name) {
+            case "input":
+                mime = await window.api.nodes.getImage(nodeProps.data.file)
+                break
+            case "output":
+                mime = await window.api.nodes.getImage(nodeProps.id + ".png")
+                break
+        }
         setMime(mime)
     }
 
@@ -144,18 +155,6 @@ const OperationNode = (nodeProps: Node) => {
                                 ) : null}
                             </DropdownMenu>
                         </Dropdown>
-                        {/* <Button
-                            isIconOnly
-                            aria-label="delete"
-                            size="sm"
-                            className="p-0 m-0 text-background h-full"
-                            variant="light"
-                            onClick={() => {
-                                dispatch(deleteNode(nodeProps.id))
-                            }}
-                        >
-                            <Xmark size={24} />
-                        </Button> */}
                     </div>
                 </div>
             </CardHeader>
@@ -305,17 +304,13 @@ const OperationNode = (nodeProps: Node) => {
                                           Load image from file
                                       </Button>
                                   ) : (
-                                      <Image
-                                          src={mime}
-                                          height={30 * 4}
-                                          className="h-[calc(32px*4)]"
-                                          isZoomed
-                                      />
+                                      <RichImage mime={mime} />
                                   )}
                               </div>
                           )
                       })()
                     : null}
+                {operation.name === "output" ? <RichImage mime={mime} /> : null}
             </CardBody>
             <Divider />
             <CardFooter className="h-[32px]">

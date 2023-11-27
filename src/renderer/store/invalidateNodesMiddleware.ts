@@ -68,6 +68,8 @@ startAppListening({
             includeCurrentNode,
         )
 
+        console.log(dependentNodes)
+
         dependentNodes.forEach((n) => {
             listenerApi.dispatch(
                 setStatus({ id: n.id, status: NodeStatus.PENDING }),

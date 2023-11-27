@@ -51,7 +51,7 @@ const FlowChart = () => {
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onConnect={onConnect}
-                onMove={onMove}
+                onMoveEnd={onMove}
                 nodeTypes={nodeTypes}
                 snapToGrid={true}
                 snapGrid={[32, 32]}
