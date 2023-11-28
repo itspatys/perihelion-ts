@@ -8,7 +8,7 @@ import { loadImg, saveImg } from "../../utils/img.util";
 
 const threshold = async (args: ThresholdArgs) => {
     const mat = await loadImg(args.inputFilePath[0])
-
+    console.log(args)
     switch (args.type) {
         case 0:
             cv.threshold(
@@ -40,18 +40,15 @@ const threshold = async (args: ThresholdArgs) => {
                 cv.THRESH_TOZERO,
             )
             break
-        case 4:
-            cv.threshold(mat, mat, args.threshold, args.maxVal, cv.THRESH_OTSU)
-            break
-        case 5:
+        /* case 4:
             cv.threshold(
                 mat,
                 mat,
                 args.threshold,
                 args.maxVal,
-                cv.THRESH_TRIANGLE,
+                cv.THRESH_BINARY + cv.THRESH_OTSU,
             )
-            break
+            break */
         default:
             cv.threshold(
                 mat,
@@ -71,8 +68,7 @@ interface ThresholdTypes {
     BINARY_INV: 1
     TRUNC: 2
     TOZERO: 3
-    OTSU: 4
-    TRIANGLE: 5
+    /* OTSU: 4 */
 }
 
 interface ThresholdArgs extends NodeBaseFunctionParameters {
@@ -113,7 +109,7 @@ const node: Node<ThresholdArgs> = {
         {
             label: "Max Value",
             type: NodeParameterTypesEnum.NUMBER,
-            name: "max-value",
+            name: "maxVal",
             description: "Max Value",
             default: 255,
             range: [0, 255],
@@ -130,8 +126,7 @@ const node: Node<ThresholdArgs> = {
                 { name: "binary-inverted", value: 1, label: "Binary Inverted" },
                 { name: "truncated", value: 2, label: "Truncated" },
                 { name: "to-zero", value: 3, label: "To Zero" },
-                { name: "otsu", value: 4, label: "Otsu" },
-                { name: "triangle", value: 5, label: "Triangle" },
+                /* { name: "otsu", value: 4, label: "Otsu" }, */
             ],
         },
     ],
