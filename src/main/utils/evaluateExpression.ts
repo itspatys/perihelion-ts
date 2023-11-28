@@ -1,4 +1,8 @@
 export const evaluateExpression = (expression: string): number => {
+    const validInputRegex = /^[0-9+\-*/().\s]+$/
+    if (!validInputRegex.test(expression)) {
+        throw new Error("Invalid characters in expression: " + expression)
+    }
     try {
         const result = Function(`return ${expression}`)()
         if (typeof result === "number" && !isNaN(result)) {

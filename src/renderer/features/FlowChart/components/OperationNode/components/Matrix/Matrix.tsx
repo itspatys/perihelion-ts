@@ -1,5 +1,6 @@
 import {
     Button,
+    Code,
     Input,
     Modal,
     ModalBody,
@@ -7,6 +8,7 @@ import {
     ModalHeader,
     useDisclosure,
 } from "@nextui-org/react"
+import { useRef } from "react"
 
 import { Node } from "../../../../../../../data/configuration-file.interface"
 import { useDispatch } from "../../../../../../store/store"
@@ -35,6 +37,15 @@ const Matrix = ({ nodeProps }: { nodeProps: Node }) => {
                 <ModalContent>
                     <ModalHeader>Edit matrix</ModalHeader>
                     <ModalBody>
+                        <p>
+                            You can use expressions, e.g. <Code>1/2</Code>.
+                        </p>
+                        <p>
+                            You can use following characters: <Code>0-9</Code>,
+                            <Code>+</Code>, <Code>-</Code>, <Code>*</Code>,
+                            <Code>/</Code>, <Code>{"("}</Code>,{" "}
+                            <Code>{")"}</Code>.
+                        </p>
                         <div
                             className={`grid grid-cols-[repeat(${cols},1fr)] grid-rows-[repeat(${rows},1fr)] w-100 gap-1 p-1`}
                             //   className={`grid grid-cols-[repeat(${cols},1fr)] grid-rows-[repeat(${rows},1fr)] w-100`}
@@ -43,12 +54,12 @@ const Matrix = ({ nodeProps }: { nodeProps: Node }) => {
                                 gridTemplateRows: `repeat(${rows},1fr)`,
                             }}
                         >
-                            {new Array(cols)
+                            {new Array(rows)
                                 .fill(0)
-                                .map((_, col) => {
-                                    return new Array(rows)
+                                .map((_, row) => {
+                                    return new Array(cols)
                                         .fill(0)
-                                        .map((_, row) => {
+                                        .map((_, col) => {
                                             return (
                                                 <Input
                                                     defaultValue={
@@ -60,6 +71,11 @@ const Matrix = ({ nodeProps }: { nodeProps: Node }) => {
                                                             ? "bordered"
                                                             : undefined
                                                     }
+                                                    onFocus={(e) => {
+                                                        const target =
+                                                            e.target as HTMLInputElement
+                                                        target.select()
+                                                    }}
                                                     onValueChange={(e) => {
                                                         let newMatrix = [
                                                             ...matrix,
