@@ -43,6 +43,43 @@ startAppListening({
         }
         if (updateNodeParameter.match(action)) {
             nodeId = action.payload.id
+
+            matrixIf: if (
+                ["cols", "rows"].includes(action.payload.parameter.name)
+            ) {
+                const node = listenerApi
+                    .getState()
+                    .workflow.nodes.find((n) => n.id === nodeId)
+
+                const matrix = node.data.operation.parameters.find(
+                    (p) => p.name === "matrix",
+                )
+
+                if (!matrix) {
+                    break matrixIf
+                }
+
+                const rows = node.data.operation.parameters.find(
+                    (p) => p.name === "rows",
+                ).value as number
+                const cols = node.data.operation.parameters.find(
+                    (p) => p.name === "cols",
+                ).value as number
+
+                const newMatrix = new Array(rows)
+                    .fill(0)
+                    .map(() => new Array<string>(cols).fill("0"))
+
+                listenerApi.dispatch(
+                    updateNodeParameter({
+                        id: nodeId,
+                        parameter: {
+                            name: "matrix",
+                            value: newMatrix,
+                        },
+                    }),
+                )
+            }
         }
         if (setFile.match(action)) {
             nodeId = action.payload.id
@@ -67,8 +104,6 @@ startAppListening({
             nodeId,
             includeCurrentNode,
         )
-
-        console.log(dependentNodes)
 
         dependentNodes.forEach((n) => {
             listenerApi.dispatch(

@@ -1,5 +1,4 @@
-import { NonEmptyArray } from "../main/utils/utils.interface";
-
+import { NonEmptyArray } from "../main/utils/utils.interface"
 
 /**
  * Enumeration of parameter types for nodes.
@@ -73,7 +72,7 @@ export interface NodeParameter {
     name: string
     type: NodeParameterTypesEnum
     description: string
-    default?: number | string
+    default?: number | string | string[][]
     options?: NodeParameterOptions[]
     range?: [number, number]
     step?: number
@@ -86,7 +85,7 @@ export interface NodeParameter {
 export interface NodeParameterOptions {
     name: string
     label?: string
-    value: string | number
+    value: string | number | string[][]
 }
 
 /**

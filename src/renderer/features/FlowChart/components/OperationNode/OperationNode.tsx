@@ -10,7 +10,6 @@ import {
     DropdownItem,
     DropdownMenu,
     DropdownTrigger,
-    Image,
     Select,
     SelectItem,
     Slider,
@@ -34,6 +33,7 @@ import {
     updateNodeParameter,
 } from "../../../../store/workflowSlice"
 import RichImage from "../RichImage"
+import Matrix from "./components/Matrix"
 
 const OperationNode = (nodeProps: Node) => {
     const operation = useSelector((state) =>
@@ -169,12 +169,16 @@ const OperationNode = (nodeProps: Node) => {
                                           (o) => o.name === p.name,
                                       ).value as number,
                                   )
+                                  const [isInitial, setIsInitial] =
+                                      useState(true)
 
                                   useEffect(() => {
-                                      setParameterValue(nodeProps.id, {
-                                          name: p.name,
-                                          value: value,
-                                      })
+                                      if (!isInitial) {
+                                          setParameterValue(nodeProps.id, {
+                                              name: p.name,
+                                              value: value,
+                                          })
+                                      }
                                   }, [value])
 
                                   return (
@@ -187,6 +191,7 @@ const OperationNode = (nodeProps: Node) => {
                                           minValue={p.range[0]}
                                           maxValue={p.range[1]}
                                           onChangeEnd={(v) => {
+                                              setIsInitial(false)
                                               if (typeof v === "object") {
                                                   setValue(v[0])
                                                   return
@@ -276,6 +281,8 @@ const OperationNode = (nodeProps: Node) => {
                                       id={p.name}
                                   />
                               </div>
+                          ) : p.type === "array" ? (
+                              <Matrix nodeProps={nodeProps} />
                           ) : null
                       })
                     : null}
