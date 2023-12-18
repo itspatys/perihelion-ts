@@ -1,8 +1,11 @@
-import { BrowserWindow } from "electron"
-import fs from "fs/promises"
-import path from "path"
+import { BrowserWindow } from "electron";
+import fs from "fs/promises";
+import path from "path";
 
-import { StoreValues, store } from "../store"
+
+
+import { StoreValues, store } from "../store";
+
 
 export interface NodeProcessArgs {
     id: string // name of output file
@@ -11,21 +14,38 @@ export interface NodeProcessArgs {
     name: string
 }
 
+const getSourceFileExtension = async (nodeId: string) => {
+    const workspacePath = store.get(StoreValues.workspacePath)
+    const dir = await fs.readdir(workspacePath)
+    const files = dir.filter((file) => file.startsWith(nodeId))
+    return files[0].split(".").pop()
+}
+
 export const nodeProcess = async (
     args: NodeProcessArgs,
     browserWindow: BrowserWindow,
 ) => {
     const workspacePath = store.get(StoreValues.workspacePath)
-    const inputPaths = args.inputIds?.map((id) =>
-        path.join(workspacePath, id + ".png"),
+    const inputPaths = await Promise.all(
+        args.inputIds?.map(async (id) =>
+            path.join(
+                workspacePath,
+                id + `.${await getSourceFileExtension(id)}`,
+            ),
+        ),
     )
-    const outputPath = path.join(workspacePath, args.id + ".png")
+    const outputPath = path.join(
+        workspacePath,
+        args.id + `.${await getSourceFileExtension(args.inputIds[0])}`,
+    )
 
     const initFunctionParameters = {
         inputFilePath: inputPaths,
         outputFilePath: [outputPath],
         ...args.params,
     }
+
+    console.log("Paths:", inputPaths, outputPath)
 
     const files = await fs.readdir(path.join(process.cwd(), ".vite/build"))
     for (const file of files) {

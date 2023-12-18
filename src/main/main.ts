@@ -139,9 +139,10 @@ ipcMain.handle(PreloadChannels.nodesLoadImage, async (event, inputName) => {
     if (!img) {
         return
     }
+    console.log(img);
     const mat = await loadImg(img)
     const workspacePath = store.get(StoreValues.workspacePath)
-    const fileName = inputName + ".png"
+    const fileName = inputName + '.' + img.split(".").pop()
     const imgPath = path.join(workspacePath, fileName)
     saveImg(mat, imgPath)
     return fileName

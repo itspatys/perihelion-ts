@@ -1,4 +1,5 @@
-import { BrowserWindow, dialog } from "electron"
+import { BrowserWindow, dialog } from "electron";
+
 
 export const showOpenFileDialog = async (browserWindow: BrowserWindow) => {
     const result = await dialog.showOpenDialog(browserWindow, {
@@ -6,7 +7,7 @@ export const showOpenFileDialog = async (browserWindow: BrowserWindow) => {
         filters: [
             {
                 name: "Images",
-                extensions: ["png", "jpg", "jpeg", "gif", "tiff"],
+                extensions: ["png", "jpg", "jpeg", "gif", "tiff", "bmp"],
             },
         ],
     })
