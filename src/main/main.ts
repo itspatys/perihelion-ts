@@ -5,6 +5,7 @@ import Jimp from "jimp"
 import path from "path"
 import fs from "fs/promises";
 
+
 import { PreloadChannels } from "../data/preload.channels"
 import { NodeProcessArgs, nodeProcess } from "./nodes/node.process"
 import { nodesLoader } from "./nodes/nodes.loader"
@@ -170,31 +171,8 @@ ipcMain.handle(PreloadChannels.nodesExportImage, async (_, id: string) => {
     await fs.copyFile(imgPath, pathToSave)
 })
 
-import esbuild from 'esbuild';
-
 ipcMain.handle(PreloadChannels.nodesSave, async (_, code: string, name: string) => {
-    const fileName = name + '.node'
-    const filePath = path.join('./src/main/nodes/filters', fileName)
-    await fs.writeFile(filePath+'.ts', code)
-
-
-    const tsPath = filePath + '.ts'
-    const jsPath = filePath + '.js'
-    const res = esbuild.transformSync(await fs.readFile(tsPath, 'utf8'), {loader: 'ts', format: 'cjs'})
-    await fs.writeFile(jsPath, res.code)
-    
-
-    await esbuild.build({
-        entryPoints: [jsPath],
-        bundle: false,
-        platform: 'node',
-        tsconfig: './tsconfig.json',
-        format: 'cjs',
-        minify: true,
-        outfile: path.join(process.cwd(), `./.vite/build/${name}.node.js`)
-    });
-    await fs.unlink(jsPath)
-    
+    await transpile(code, name)
 })
 /*
  __          ______  _____  _  __ _____ _____        _____ ______ 
