@@ -21,6 +21,26 @@ export const showOpenFileDialog = async (browserWindow: BrowserWindow) => {
     return filePath
 }
 
+export const showOpenNodeFileDialog = async (browserWindow: BrowserWindow) => {
+    const result = await dialog.showOpenDialog(browserWindow, {
+        properties: ["openFile"],
+        filters: [
+            {
+                name: "Nodes",
+                extensions: ["ts"],
+            },
+        ],
+    })
+
+    if (result.canceled) {
+        return
+    }
+
+    const [filePath] = result.filePaths
+
+    return filePath
+}
+
 export const showCreateFileDialog = async (filePath: string) => {
     const saveDialogOptions = {
         title: 'Save File',

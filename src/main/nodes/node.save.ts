@@ -2,11 +2,12 @@ import esbuild from 'esbuild';
 import fs from 'fs/promises'
 import path from "path"
 
-export const transpile = async (code: string, name: string) => {
+export const transpile = async (code: string, name: string, saveFile=true) => {
     const fileName = name + '.node'
     const filePath = path.join('./src/main/nodes/filters', fileName)
-    await fs.writeFile(filePath+'.ts', code)
-
+    if(saveFile){
+        await fs.writeFile(filePath+'.ts', code)
+    }
 
     const tsPath = filePath + '.ts'
     const jsPath = filePath + '.js'

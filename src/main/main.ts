@@ -10,7 +10,7 @@ import { PreloadChannels } from "../data/preload.channels"
 import { NodeProcessArgs, nodeProcess } from "./nodes/node.process"
 import { nodesLoader } from "./nodes/nodes.loader"
 import { StoreValues, store } from "./store"
-import { showCreateFileDialog, showOpenFileDialog } from "./utils/file"
+import { showCreateFileDialog, showOpenFileDialog, showOpenNodeFileDialog } from "./utils/file"
 import { loadImg, saveImg } from "./utils/img.util"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { workspaceLoad } from "./workspace/workspace.load"
@@ -173,6 +173,22 @@ ipcMain.handle(PreloadChannels.nodesExportImage, async (_, id: string) => {
 
 ipcMain.handle(PreloadChannels.nodesSave, async (_, code: string, name: string) => {
     await transpile(code, name)
+})
+
+ipcMain.handle(PreloadChannels.nodesSaveFromFile, async (event) => {
+    const browserWindow = BrowserWindow.fromWebContents(event.sender)
+    if (!browserWindow) return
+    const filePath = await showOpenNodeFileDialog(browserWindow);
+    if (!filePath) {
+        return
+    }
+    const baseName = path.basename(filePath)
+    await fs.copyFile(filePath, path.join(process.cwd(), `/src/main/nodes/filters/${baseName}`))
+    await transpile(await fs.readFile(filePath, 'utf8'), baseName.split('.')[0], false)
+})
+
+ipcMain.handle(PreloadChannels.nodesSaveBulk, async () => {
+    return;
 })
 /*
  __          ______  _____  _  __ _____ _____        _____ ______ 
