@@ -3,17 +3,19 @@ import { config } from "dotenv"
 import { BrowserWindow, app, ipcMain, screen, session } from "electron"
 import Jimp from "jimp"
 import path from "path"
+import fs from "fs/promises";
 
 import { PreloadChannels } from "../data/preload.channels"
 import { NodeProcessArgs, nodeProcess } from "./nodes/node.process"
 import { nodesLoader } from "./nodes/nodes.loader"
 import { StoreValues, store } from "./store"
-import { showOpenFileDialog } from "./utils/file"
+import { showCreateFileDialog, showOpenFileDialog } from "./utils/file"
 import { loadImg, saveImg } from "./utils/img.util"
 import { workspaceCreate } from "./workspace/workspace.create"
 import { workspaceLoad } from "./workspace/workspace.load"
 import { workspaceOpen } from "./workspace/workspace.open"
 import { workspaceSave } from "./workspace/workspace.save"
+import { transpile } from "./nodes/node.save";
 
 config()
 if (require("electron-squirrel-startup")) {
@@ -139,7 +141,6 @@ ipcMain.handle(PreloadChannels.nodesLoadImage, async (event, inputName) => {
     if (!img) {
         return
     }
-    console.log(img);
     const mat = await loadImg(img)
     const workspacePath = store.get(StoreValues.workspacePath)
     const fileName = inputName + '.' + img.split(".").pop()
@@ -156,6 +157,45 @@ ipcMain.handle(PreloadChannels.getImage, async (_, file: string) => {
     return mime
 })
 
+
+ipcMain.handle(PreloadChannels.nodesExportImage, async (_, id: string) => {
+    const workspacePath = store.get(StoreValues.workspacePath)
+    const dir = await fs.readdir(workspacePath)
+    const files = dir.filter((file) => file.startsWith(id))
+    const pathToSave = await showCreateFileDialog(files[0])
+    if (!pathToSave) {
+        return
+    }
+    const imgPath = path.join(workspacePath, files[0])
+    await fs.copyFile(imgPath, pathToSave)
+})
+
+import esbuild from 'esbuild';
+
+ipcMain.handle(PreloadChannels.nodesSave, async (_, code: string, name: string) => {
+    const fileName = name + '.node'
+    const filePath = path.join('./src/main/nodes/filters', fileName)
+    await fs.writeFile(filePath+'.ts', code)
+
+
+    const tsPath = filePath + '.ts'
+    const jsPath = filePath + '.js'
+    const res = esbuild.transformSync(await fs.readFile(tsPath, 'utf8'), {loader: 'ts', format: 'cjs'})
+    await fs.writeFile(jsPath, res.code)
+    
+
+    await esbuild.build({
+        entryPoints: [jsPath],
+        bundle: false,
+        platform: 'node',
+        tsconfig: './tsconfig.json',
+        format: 'cjs',
+        minify: true,
+        outfile: path.join(process.cwd(), `./.vite/build/${name}.node.js`)
+    });
+    await fs.unlink(jsPath)
+    
+})
 /*
  __          ______  _____  _  __ _____ _____        _____ ______ 
  \ \        / / __ \|  __ \| |/ // ____|  __ \ /\   / ____|  ____|

@@ -11,7 +11,7 @@ export async function nodesLoader() {
                 const module = await require(
                     path.join(process.cwd(), ".vite/build", file),
                 )
-                filters.push(module)
+                filters.push(module)    
             }
         }
         fs.writeFile("nodes.json", JSON.stringify(filters))

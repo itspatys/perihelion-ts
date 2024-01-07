@@ -2,8 +2,6 @@ import { BrowserWindow } from "electron";
 import fs from "fs/promises";
 import path from "path";
 
-
-
 import { StoreValues, store } from "../store";
 
 

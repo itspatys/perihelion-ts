@@ -36,6 +36,26 @@ const api = {
         getImage: async (file: string): Promise<string> => {
             return ipcRenderer.invoke(PreloadChannels.getImage, file)
         },
+
+        exportImage: async (id: string): Promise<string> => {
+            //todo: implement using nodeId, export this image to provided path, or to file dialog
+            return ipcRenderer.invoke(PreloadChannels.nodesExportImage, id)
+        },
+
+        save: async (code: string, name: string) => {
+            //todo: implement, save node from text as file
+            return ipcRenderer.invoke(PreloadChannels.nodesSave, code, name)
+        },
+
+        saveFromFile: async () => {
+            //todo: implement save node from file as file
+            return ipcRenderer.invoke(PreloadChannels.nodesSaveFromFile)
+        },
+
+        saveBulk: async () => {
+            //todo implement save nodes from archive
+            return ipcRenderer.invoke(PreloadChannels.nodesSaveBulk)
+        }
     },
 
     workspace: {

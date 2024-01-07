@@ -20,3 +20,19 @@ export const showOpenFileDialog = async (browserWindow: BrowserWindow) => {
 
     return filePath
 }
+
+export const showCreateFileDialog = async (filePath: string) => {
+    const saveDialogOptions = {
+        title: 'Save File',
+        defaultPath: filePath
+    };
+    
+    const savePath = await dialog.showSaveDialog(saveDialogOptions);
+
+    if (savePath) {
+        console.log('Selected path to save file:', savePath);
+    } else {
+        console.log('User canceled save dialog.');
+    }
+    return savePath.filePath;
+}
